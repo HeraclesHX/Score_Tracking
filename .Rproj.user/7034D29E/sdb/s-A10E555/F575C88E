@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #\n# ProjectName:  Xi'an Jassen PET\n# Purpose:      Read in all the data and do the QC\n# programmer:   Xin Huang\n# Date:         06-20-2017\n# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #\n\n##-- load the required packages\nlibrary(openxlsx)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(lubridate)\n\n##-- read in the raw data, including EDA, Meeting and Call\neda_dat <- read.xlsx(\"./02_Inputs/EDAData201707.xlsx\", \n                     sheet = \"Raw Data\")\ncolnames(eda_dat)[c(4, 5, 6, 10, 11)] <- \n  c(\"questionare.id\", \"most.recent.modify.date\", \"survey.name\", \"questions\", \n    \"answers\")\ncolnames(eda_dat) <- tolower(colnames(eda_dat))\neda_dat$most.recent.modify.date.m <-\n  as.Date(eda_dat$most.recent.modify.date, origin = \"1899-12-30\")\n\n\nmeeting_dat <- read.xlsx(\"./02_Inputs/iMeetingData.xlsx\", \n                         sheet = \"iMeeting\")\ncolnames(meeting_dat)[c(2, 3, 4, 5, 6, 7, 10, 11, 12)] <-\n  c(\"imeeting.name\", \"creator.id\", \"imeeting.addr.id\", \"imeeting.addr\",\n    \"imeeting.time\", \"imeeting.type\", \"attendee.hosp.id\", \"attendee.hosp.name\",\n    \"doctor.id\")\ncolnames(meeting_dat) <- tolower(colnames(meeting_dat))\n\ncall_dat <- read.xlsx(\"./02_Inputs/CallData.xlsx\")\ncolnames(call_dat)[c(4, 11)] <- c(\"call.date\", \"doctor.tier\")\ncolnames(call_dat) <- tolower(colnames(call_dat))\ncall_dat$call.date <- as.Date(call_dat$call.date, origin = \"1899-12-30\")\n\n\n##-- begin QC process\n\n#- chking the date period\n\ntable(year(eda_dat$most.recent.modify.date.m),\n      month(eda_dat$most.recent.modify.date.m))\n\n\n#         1     2     3     4     5     6     7     8     9    10    11    12\n# 2016     0     0     0     0     0     0  1275 24541  4757  3463  2120  3278\n# 2017  1693   745   934   194   978   124     0     0     0     0     0     0\n\n",
+    "created" : 1500343997451.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "269101599",
+    "id" : "F575C88E",
+    "lastKnownWriteTime" : 1500360918,
+    "last_content_update" : 1500360918767,
+    "path" : "E:/Projects/2017/Xi'an_Janssen_PET/04_Codes/02_Readin_QC.R",
+    "project_path" : "04_Codes/02_Readin_QC.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

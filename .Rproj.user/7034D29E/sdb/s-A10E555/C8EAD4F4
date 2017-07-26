@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #\n# ProjectName:  Xi'an Jassen PET\n# Purpose:      Setup the Directories and Reference\n# programmer:   Xin Huang\n# Date:         06-20-2017\n# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #\n\n# loading the required packages\noptions(java.parameters = \"-Xmx2048m\")\n\nlibrary(openxlsx)\nlibrary(RODBC)\nlibrary(dplyr)\nlibrary(plm)\nlibrary(dynlm)\nlibrary(randomForest)\n\n## setup the directories\nsystem(\"mkdir 01_Background 02_Inputs 03_Outputs 04_Codes 05_Internal_Review\n       06_Deliveries\")\n\n",
+    "created" : 1497928366868.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "826023360",
+    "id" : "C8EAD4F4",
+    "lastKnownWriteTime" : 1497929655,
+    "last_content_update" : 1497929655525,
+    "path" : "E:/Projects/2017/Xi'an_Janssen_PET/04_Codes/00_Preparing_Working.R",
+    "project_path" : "04_Codes/00_Preparing_Working.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
