@@ -12,6 +12,7 @@ library(ggplot2)
 library(lubridate)
 
 ##-- read in the raw data, including EDA, Meeting and Call
+setwd("D:/Rachel/WorkMaterial/Poject/Xi'an Jassen PET")
 eda_dat <- read.xlsx("./02_Inputs/EDAData201707.xlsx", 
                      sheet = "Raw Data",detectDates=T)
 colnames(eda_dat)[c(4, 5, 6, 10, 11)] <- 
@@ -20,20 +21,29 @@ colnames(eda_dat)[c(4, 5, 6, 10, 11)] <-
 colnames(eda_dat) <- tolower(colnames(eda_dat))
 eda_dat$most.recent.modify.date <-
   as.Date(eda_dat$most.recent.modify.date, origin = "1899-12-30")
-
+eda_dat[eda_dat$region%in%c("NULL",'Null'),]$region <- 'NULL'
+unique(eda_dat$region)
 
 meeting_dat <- read.xlsx("./02_Inputs/iMeetingData.xlsx", 
                          sheet = "iMeeting",detectDates=T)
 colnames(meeting_dat)[c(2, 3, 4, 5, 6, 7, 10, 11, 12)] <-
   c("imeeting.name", "creator.id", "imeeting.addr.id", "imeeting.addr",
     "imeeting.time", "imeeting.type", "attendee.hosp.id", "attendee.hosp.name",
-    "doctor.id")
+    "doctorid")
 colnames(meeting_dat) <- tolower(colnames(meeting_dat))
+meeting_dat$imeeting.time <-paste(substr(meeting_dat$imeeting.time,7,10),
+                                  substr(meeting_dat$imeeting.time,1,2),
+                                  substr(meeting_dat$imeeting.time,4,5),
+                                  sep='-')
+meeting_dat$imeeting.time <-
+  as.Date(meeting_dat$imeeting.tim, origin = "1899-12-30")
+
 
 call_dat <- read.xlsx("./02_Inputs/CallData.xlsx",detectDates=T)
 colnames(call_dat)[c(4, 11)] <- c("call.date", "doctor.tier")
 colnames(call_dat) <- tolower(colnames(call_dat))
 call_dat$call.date <- as.Date(call_dat$call.date, origin = "1899-12-30")
+
 
 
 ##-- begin QC process
