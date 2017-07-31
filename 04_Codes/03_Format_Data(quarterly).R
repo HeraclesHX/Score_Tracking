@@ -74,23 +74,19 @@ p10_tmp1<-tbl_df(newdata) %>%
   group_by(quarter) %>%
   dplyr::summarize(counts=n_distinct(doctorid))
 p10_tmp2<-data.frame(p10_tmp1,difference=c(0,diff(p10_tmp1$counts)))
-#View(p10_tmp2)
-p <- ggplot(data=p10_tmp2,aes(x=factor(quarter),y=counts,group=F,colour='skyblue'))
-p <- p + geom_line() +  geom_point() 
-p <- p + geom_bar(aes(y=difference),stat="identity",colour=F,fill='skyblue',alpha=0.5)
-p <- p + scale_y_continuous(sec.axis = sec_axis(~.*1, name = "increase"))
-#p <- p + scale_colour_manual(values = c("skyblue", "skyblue"))
-p <- p + labs(y = "Counts",
-              x = "Date") + 
-  scale_colour_discrete(#values = c("red", "skyblue"),
-    breaks=c("counts", "difference"),
-    labels=c("counts", "difference")) #+
-#scale_shape_discrete(
-#breaks=c("counts", "difference"),
-#labels=c("counts", "difference"))
 
-p+theme(legend.position="bottom")+guides(fill=guide_legend(title=NULL))
-
+ay <- list(
+  tickfont = list(color = "red"),
+  overlaying = "y",
+  side = "right",
+  title = ""
+)
+p10 <- p10_tmp2 %>% plot_ly(x = ~quarter, y = ~difference, name = "新增", type = "bar") %>%
+  add_trace(y = ~counts, name = '总数',mode='lines',type='scatter',yaxis = "y2") %>%
+  layout(
+    title = "受访医生总数及每季度新增人数", yaxis2 = ay,
+    xaxis = list(title="")
+  )
 
 
 
@@ -110,19 +106,15 @@ i<-'2016 Q3'
 p10_tmp3<-P11_p1[P11_p1$quarter==i,]
 
 
-P11_p1 <- newdata[newdata$quarter==i,] %>%
+p11_first <- newdata[newdata$quarter==i,] %>%
   group_by(region) %>%
   dplyr::summarize(counts = n_distinct(doctorid)) %>%
   plot_ly(labels = ~region, values = ~counts) %>%
   add_pie(hole = 0.6) %>%
-  layout(title = "Donut charts using Plotly",  showlegend = F,
+  layout(title = "大区分布",  showlegend = T,
          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
-# Create a shareable link to your chart
-# Set up API credentials: https://plot.ly/r/getting-started
-p11_first = plotly_POST(P11_p1, filename="pie/donut")
-p11_first
 
 
 ## picture 4 科室分布
@@ -133,19 +125,16 @@ P11_p4<-newdata%>%
 # Quarter i
 data<-P11_p4[P11_p4$quarter==i,]
 
-P11_p4 <- newdata[newdata$quarter==i,] %>%
+p11_fourth <- newdata[newdata$quarter==i,] %>%
   group_by(region) %>%
   dplyr::summarize(counts = n_distinct(doctorid)) %>%
   plot_ly(labels = ~region, values = ~counts) %>%
   add_pie(hole = 0.6) %>%
-  layout(title = "Donut charts using Plotly",  showlegend = F,
+  layout(title = "科室分布",  showlegend = T,
          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
-# Create a shareable link to your chart
-# Set up API credentials: https://plot.ly/r/getting-started
-p11_fourth = plotly_POST(P11_p4, filename="pie/donut")
-p11_fourth
+
 
 
 
@@ -155,20 +144,24 @@ p11_fourth
 p12_tmp1<-newdata%>% group_by(quarter,hcp.major)%>%
   dplyr::summarise(counts=n_distinct(doctorid))
 
-p12_first <- ggplot(data=p12_tmp1,aes(x=factor(quarter),y=counts,group=hcp.major,colour=hcp.major)) +
-  geom_line() +  geom_point() +
-  theme(legend.title = element_blank(),legend.position = 'top')
-p12_first
-
-p12_second <- ggplot(data=p12_tmp1[order(p12_tmp1$counts, decreasing = T),] ,aes(x=factor(quarter),y=counts,fill=hcp.major)) +
-  geom_bar(stat='identity') +
-  labs(x = '', y = '', title = '') +
-theme(legend.title = element_blank(),legend.position = 'left')
-p12_second
-
+View(p12_tmp1)
+p12_tmp1 <- p12_tmp1 %>% spread(hcp.major,counts)
+p12_first <-plot_ly(ungroup(p12_tmp1), x = ~factor(quarter), y = ~`1`, type = 'scatter', mode='lines',name='1.0') %>%
+  add_trace(y = ~`2`, name = '2.0', connectgaps = TRUE) %>%
+  add_trace(y = ~`3`, name = '3.0', connectgaps = TRUE) %>%
+  layout(title = "每季度医生观念级别变化情况",  showlegend = T,
+         xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
+         yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T))
+  
 
 
-
+p12_second <- plot_ly(ungroup(p12_tmp1), x = ~factor(quarter), y = ~`1`,name='1.0', type = 'bar') %>%
+  add_trace(y = ~`2`, name = '2.0') %>%
+  add_trace(y = ~`3`, name = '3.0') %>%
+  layout(title = "每季度医生观念级别变化情况",  showlegend = T,
+         xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
+         yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T), 
+         barmode = 'stack')
 
 
 
@@ -184,39 +177,33 @@ p13_tmp2 <- p13_tmp1 %>% group_by(quarter,hcp.major,region) %>%
                                     counts=sum(.$counts))))
 
 ## quarter i
-p13_tmp3 <- p13_tmp2[p13_tmp2$quarter == i, ]
-
-p13_first <-
-  ggplot(data = p13_tmp3 , aes(
-    x = factor(region),
-    y = counts,
-    fill = hcp.major
-  )) +
-  geom_bar(stat = 'identity') +
-  labs(x = '', y = '', title = '') +
-  theme(legend.title = element_blank(), legend.position = 'left')
-p13_first
+p13_tmp2 <- p13_tmp2 %>% spread(hcp.major,counts)
+p13_first <- plot_ly(ungroup(p13_tmp2[p13_tmp2$quarter == i, ]), x = ~factor(region), y = ~`1`,name='1.0', type = 'bar') %>%
+  add_trace(y = ~`2`, name = '2.0') %>%
+  add_trace(y = ~`3`, name = '3.0') %>%
+  layout(title = "大区分布",  showlegend = T,
+         xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
+         yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T), 
+         barmode = 'stack')
 
 
 ## picture 4 科室分布
-p13_tmp4 <- p13_tmp1 %>% group_by(quarter,hcp.major,department) %>%
+p13_tmp3 <- p13_tmp1 %>% group_by(quarter,hcp.major,department) %>%
   dplyr::summarise(counts = n_distinct(doctorid)) %>%
   do(plyr::rbind.fill(., data_frame(quarter = first(.$quarter),
                                     hcp.major=first(.$hcp.major),
                                     department = '全部科室',
                                     counts=sum(.$counts))))
 ## quarter i
-p13_tmp5 <- p13_tmp4[p13_tmp4$quarter == i, ]
+p13_tmp3 <- p13_tmp3 %>% spread(hcp.major,counts)
 
-p13_fourth <-
-  ggplot(data = p13_tmp5 , aes(
-    x = factor(department),
-    y = counts,
-    fill = hcp.major
-  )) +
-  geom_bar(stat = 'identity') +
-  labs(x = '', y = '', title = '') +
-  theme(legend.title = element_blank(), legend.position = 'left')
+p13_fourth <- plot_ly(ungroup(p13_tmp3[p13_tmp3$quarter == i, ]), x = ~factor(department), y = ~`1`,name='1.0', type = 'bar') %>%
+  add_trace(y = ~`2`, name = '2.0') %>%
+  add_trace(y = ~`3`, name = '3.0') %>%
+  layout(title = "科室分布",  showlegend = T,
+         xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
+         yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T), 
+         barmode = 'stack')
 p13_fourth
 
 
