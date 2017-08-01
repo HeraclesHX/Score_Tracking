@@ -3,6 +3,7 @@ library(shinythemes)
 library(plotly)
 library(dplyr)
 library(shinydashboard)
+library(tidyr)
 
 shinyApp(
   ui = tagList(
