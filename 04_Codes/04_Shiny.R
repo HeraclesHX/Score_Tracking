@@ -1073,7 +1073,15 @@ shinyApp(
                              input$year4, input$quarter4, sep = ""),
                xaxis = list(title = 'Percentage'),
                yaxis = list(title = 'Attitude'),
-               barmode = "group")
+               barmode = "group",
+               autosize = T,
+               margin =  list(
+                 l = 250,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     output$q16_bar_adv <- renderPlotly({
@@ -1087,7 +1095,15 @@ shinyApp(
                              input$year4, input$quarter4, sep = ""),
                xaxis = list(title = 'Percentage'),
                yaxis = list(title = 'Promotional Activities'),
-               barmode = "group")
+               barmode = "group",
+               autosize = T,
+               margin =  list(
+                 l = 250,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     ##-- Part3
@@ -1114,7 +1130,15 @@ shinyApp(
                              input$year5, input$quarter5, sep = ""),
                xaxis = list(title = 'Meeting Type'),
                yaxis = list(title = 'Average Meeting Counts'),
-               barmode = "group")
+               barmode = "group",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 150,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     output$call_bar_score <- renderPlotly({
@@ -1127,7 +1151,15 @@ shinyApp(
                              input$year5, input$quarter5, sep = ""),
                xaxis = list(title = 'Region'),
                yaxis = list(title = 'Average Call Counts'),
-               barmode = "group")
+               barmode = "group",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 150,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     ##-- 3.2
@@ -1148,7 +1180,15 @@ shinyApp(
               color = ~hcp.major) %>%
         layout(title = paste("Tracking of Average Meeting Count for Physicians with Different Scores"),
                xaxis = list(title = 'Quarter'),
-               yaxis = list(title = 'Average Meeting Counts'))
+               yaxis = list(title = 'Average Meeting Counts'),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 50,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     tmp1_eda_dat_tgt_with_call_all <- reactive({
@@ -1168,7 +1208,15 @@ shinyApp(
               color = ~hcp.major) %>%
         layout(title = paste("Tracking of Average Call Count for Physicians with Different Scores"),
                xaxis = list(title = 'Quarter'),
-               yaxis = list(title = 'Average Call Counts'))
+               yaxis = list(title = 'Average Call Counts'),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 50,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     ##-- Part4
@@ -1195,7 +1243,15 @@ shinyApp(
                              input$year6, input$quarter6, sep = ""),
                xaxis = list(title = 'Meeting Type'),
                yaxis = list(title = 'Average Meeting Counts'),
-               barmode = "group")
+               barmode = "group",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 150,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     output$call_bar_adv <- renderPlotly({
@@ -1208,7 +1264,15 @@ shinyApp(
                              input$year6, input$quarter6, sep = ""),
                xaxis = list(title = 'Region'),
                yaxis = list(title = 'Average Call Counts'),
-               barmode = "group")
+               barmode = "group",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 150,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     ##-- 4.2
@@ -1229,7 +1293,15 @@ shinyApp(
               color = ~adv_flag) %>%
         layout(title = paste("Tracking of Average Meeting Count for Physicians with Progression VS. Overall"),
                xaxis = list(title = 'Quarter'),
-               yaxis = list(title = 'Average Meeting Counts'))
+               yaxis = list(title = 'Average Meeting Counts'),
+               autosize = T,
+               margin =  list(
+                 l = 150,
+                 r = 50,
+                 b = 150,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     tmp1_eda_dat_tgt_with_call_adv_all <- reactive({
@@ -1249,7 +1321,15 @@ shinyApp(
               color = ~adv_flag) %>%
         layout(title = paste("Tracking of Average Call Count for Physicians with Progression VS. Overall"),
                xaxis = list(title = 'Quarter'),
-               yaxis = list(title = 'Average Call Counts'))
+               yaxis = list(title = 'Average Call Counts'),
+               autosize = T,
+               margin =  list(
+                 l = 150,
+                 r = 50,
+                 b = 150,
+                 t = 100,
+                 pad = 4
+               ))
     })
   }
 )
