@@ -20,18 +20,22 @@ eda_dat_tgt <- eda_dat %>%
   select(doctorid, department, hospital, region, hcp.major,
          most.recent.modify.date.m) %>%
   mutate(Year = substr(most.recent.modify.date.m, 1, 4),
-         Quarter = ifelse(as.numeric(substr(most.recent.modify.date.m, 6, 7)) %in% c(1, 2, 3),
+         Quarter = ifelse(as.numeric(substr(most.recent.modify.date.m, 6, 7)) %in%
+                            c(1, 2, 3),
                           "Q1", 
-                          ifelse(as.numeric(substr(most.recent.modify.date.m, 6, 7)) %in% c(4, 5, 6),
+                          ifelse(as.numeric(substr(most.recent.modify.date.m, 6, 7)) %in% 
+                                   c(4, 5, 6),
                                        "Q2",
-                                       ifelse(as.numeric(substr(most.recent.modify.date.m, 6, 7)) %in% c(7, 8, 9),
+                                       ifelse(as.numeric(substr(most.recent.modify.date.m, 6, 7)) %in% 
+                                                c(7, 8, 9),
                                               "Q3",
                                               "Q4")))) %>%
   distinct() %>%
   arrange(doctorid, most.recent.modify.date.m) %>%
   group_by(doctorid, Year, Quarter) %>%
   filter(row_number() == n()) %>%
-  ungroup()
+  ungroup() %>%
+  mutate(region = toupper(region))
   
 #- here is the doc tier information
 doc_tier <- call_dat %>%
@@ -129,6 +133,10 @@ doc_perception_score_region_qtr <- eda_dat_tgt_with_tier %>%
                                     doc_cnt_total = sum(.$doc_cnt_total, na.rm = TRUE),
                                     doc_cnt_pct = sum(.$doc_cnt, na.rm = TRUE)/
                                       sum(.$doc_cnt_total, na.rm = TRUE)))) %>%
+  left_join(doc_cnt_qtr, by = c("Year", "Quarter")) %>%
+  mutate(doc_cnt_pct = ifelse(region == "National", 
+                              doc_cnt.x / doc_cnt.y,
+                              doc_cnt_pct)) %>%
   ungroup()
 
 #- calculate the change trend of perception score of doc by doc tier
@@ -148,7 +156,16 @@ doc_perception_score_tier_qtr <- eda_dat_tgt_with_tier %>%
                                     doc_cnt_total = sum(.$doc_cnt_total, na.rm = TRUE),
                                     doc_cnt_pct = sum(.$doc_cnt, na.rm = TRUE)/
                                       sum(.$doc_cnt_total, na.rm = TRUE)))) %>%
+  left_join(doc_cnt_qtr, by = c("Year", "Quarter")) %>%
+  mutate(doc_cnt_pct = ifelse(doctor.tier == "All Physicians", 
+                              doc_cnt.x / doc_cnt.y,
+                              doc_cnt_pct)) %>%
   ungroup()
+
+doc_perception_score_tier_qtr$doctor.tier <-
+  factor(doc_perception_score_tier_qtr$doctor.tier,
+         levels = c("All Physicians", "A", "B", "C", "U", NA))
+
 
 #- calculate the change trend of perception score of doc by department
 doc_perception_score_department_qtr <- eda_dat_tgt_with_tier %>%
@@ -167,6 +184,10 @@ doc_perception_score_department_qtr <- eda_dat_tgt_with_tier %>%
                                     doc_cnt_total = sum(.$doc_cnt_total, na.rm = TRUE),
                                     doc_cnt_pct = sum(.$doc_cnt, na.rm = TRUE)/
                                       sum(.$doc_cnt_total, na.rm = TRUE)))) %>%
+  left_join(doc_cnt_qtr, by = c("Year", "Quarter")) %>%
+  mutate(doc_cnt_pct = ifelse(department == "All Department", 
+                              doc_cnt.x / doc_cnt.y,
+                              doc_cnt_pct)) %>%
   ungroup()
 
 
@@ -384,11 +405,12 @@ eda_dat_15_q_adv <- eda_dat %>%
   left_join(smmy_psc_qtr_gather, by = c("doctorid", "Year", "Quarter")) %>%
   ungroup() %>%
   group_by(Year, Quarter) %>%
-  mutate(doc_cnt_total = n()) %>%
+  mutate(doc_cnt_total_adv = sum(adv_flag, na.rm = TRUE),
+         doc_cnt_total = n()) %>%
   separate_rows(answers, sep = ";") %>%
-  group_by(Year, Quarter, answers, doc_cnt_total, adv_flag) %>%
+  group_by(Year, Quarter, answers, doc_cnt_total, doc_cnt_total_adv, adv_flag) %>%
   summarise(doc_cnt = n()) %>%
-  mutate(doc_cnt_pct = doc_cnt / doc_cnt_total) %>%
+  mutate(doc_cnt_pct = doc_cnt / doc_cnt_total_adv) %>%
   ungroup()
 
 eda_dat_16_q_adv <- eda_dat %>%
@@ -414,11 +436,12 @@ eda_dat_16_q_adv <- eda_dat %>%
   left_join(smmy_psc_qtr_gather, by = c("doctorid", "Year", "Quarter")) %>%
   ungroup() %>%
   group_by(Year, Quarter) %>%
-  mutate(doc_cnt_total = n()) %>%
+  mutate(doc_cnt_total_adv = sum(adv_flag, na.rm = TRUE),
+         doc_cnt_total = n()) %>%
   separate_rows(answers, sep = ";") %>%
-  group_by(Year, Quarter, answers, doc_cnt_total, adv_flag) %>%
+  group_by(Year, Quarter, answers, doc_cnt_total, doc_cnt_total_adv, adv_flag) %>%
   summarise(doc_cnt = n()) %>%
-  mutate(doc_cnt_pct = doc_cnt / doc_cnt_total) %>%
+  mutate(doc_cnt_pct = doc_cnt / doc_cnt_total_adv) %>%
   ungroup()
 
 

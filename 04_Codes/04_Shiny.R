@@ -395,8 +395,9 @@ shinyApp(
     observe({
       tmp_year <- unique(doc_region_dist_qtr$Year)
       tmp_quarter <- unique(doc_region_dist_qtr$Quarter)
-      tmp_level <-unique(doc_perception_score_tier_qtr$doctor.tier)
-      tmp_region <- unique(eda_dat_tgt_with_call_all$region)
+      tmp_level <- as.character(unique(doc_perception_score_tier_qtr$doctor.tier))
+      # tmp_region <- unique(eda_dat_tgt_with_call_all$region)
+      tmp_region <- c("沪鲁苏皖", "京津冀黑辽吉", "粤桂琼", "浙闽湘鄂赣", "NULL", "Total")
       tmp_imeeting <- unique(eda_dat_tgt_with_meeting_all$imeeting.type)
       tmp_imeeting <- tmp_imeeting[!is.na(tmp_imeeting)]
       updateSelectizeInput(session,
@@ -411,7 +412,7 @@ shinyApp(
                            server = TRUE)
       updateSelectizeInput(session,
                            'level',
-                           choices = tmp_level[rank(tmp_level)],
+                           choices = tmp_level,
                            selected = "A",
                            server = TRUE)
       updateSelectizeInput(session,
@@ -443,7 +444,7 @@ shinyApp(
       updateSelectizeInput(session,
                            'quarter3',
                            choices = tmp_quarter[rank(tmp_quarter)],
-                           selected = "Q3",
+                           selected = "Q4",
                            server = TRUE)
       
       updateSelectizeInput(session,
@@ -472,7 +473,7 @@ shinyApp(
       
       updateSelectizeInput(session,
                            'region1',
-                           choices = tmp_region[rank(tmp_region)],
+                           choices = tmp_region,
                            selected = NULL,
                            server = TRUE)
       
@@ -496,7 +497,7 @@ shinyApp(
       
       updateSelectizeInput(session,
                            'region2',
-                           choices = tmp_region[rank(tmp_region)],
+                           choices = tmp_region,
                            selected = NULL,
                            server = TRUE)
       
@@ -649,7 +650,15 @@ shinyApp(
                                   text = doc_cnt_qtr$doc_cnt,
                                   xanchor = 'center',
                                   yanchor = 'bottom',
-                                  showarrow = FALSE))
+                                  showarrow = FALSE),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
       
       p
     })
@@ -672,7 +681,15 @@ shinyApp(
                                   text = doc_cnt_qtr$count_change,
                                   xanchor = 'center',
                                   yanchor = 'bottom',
-                                  showarrow = FALSE))
+                                  showarrow = FALSE),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
       
       p
     })
@@ -711,7 +728,15 @@ shinyApp(
         layout(title = "Level Distribution of Physicians", 
                showlegend = F,
                xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-               yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+               yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
       
     })
     
@@ -721,7 +746,15 @@ shinyApp(
         layout(title = "Department Distribution of Physicians", 
                showlegend = F,
                xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-               yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+               yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
       
     })
     
@@ -735,7 +768,7 @@ shinyApp(
     output$doc_line <- renderPlotly({
       plot_ly(tmp_doc_perception_score_tier_qtr(),
               x = ~Quarter,
-              y = ~doc_cnt,
+              y = ~doc_cnt.x,
               type = "scatter",
               mode = 'linesmarker',
               linetype = ~hcp.major,
@@ -743,7 +776,15 @@ shinyApp(
         layout(title = paste("Tracking of ", input$level, 
                              " Physicians Scores by Quarter"),
                xaxis = list(title = 'Quarter'),
-               yaxis = list(title = 'Physicians Count'))
+               yaxis = list(title = 'Physicians Count'),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     output$doc_cnt_stk_bar <- renderPlotly({
@@ -756,7 +797,15 @@ shinyApp(
                              " Physicians Scores by Quarter"),
                xaxis = list(title = 'Quarter'),
                yaxis = list(title = 'Percentage'),
-               barmode = "stack")
+               barmode = "stack",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     ##- below charts are for distribution of physicians score and ratio
@@ -788,7 +837,15 @@ shinyApp(
                              input$year, input$quarter, sep = ""),
                xaxis = list(title = 'Region'),
                yaxis = list(title = 'Percentage'),
-               barmode = "stack")
+               barmode = "stack",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     output$level_stk <- renderPlotly({
@@ -801,7 +858,15 @@ shinyApp(
                              input$year, input$quarter, sep = ""),
                xaxis = list(title = 'Doctor Level'),
                yaxis = list(title = 'Percentage'),
-               barmode = "stack")
+               barmode = "stack",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     output$department_stk <- renderPlotly({
@@ -814,7 +879,15 @@ shinyApp(
                              input$year, input$quarter, sep = ""),
                xaxis = list(title = 'Department'),
                yaxis = list(title = 'Percentage'),
-               barmode = "stack")
+               barmode = "stack",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     ##- below charts are for Attitude to Sporanox and promotional activities for
@@ -845,7 +918,15 @@ shinyApp(
         layout(title = paste("Sporanox Advantages Accepted by Physician with Different Scores in",
                              input$year2, input$quarter2, sep = ""),
                xaxis = list(title = 'HCP Major'),
-               yaxis = list(title = 'Percentage'))
+               yaxis = list(title = 'Percentage'),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     output$q16_line <- renderPlotly({
@@ -859,7 +940,15 @@ shinyApp(
         layout(title = paste("Sporanox Promotions Accepted by Physician with Different Scores ",
                              input$year2, input$quarter2, sep = ""),
                xaxis = list(title = 'HCP Major'),
-               yaxis = list(title = 'Percentage'))
+               yaxis = list(title = 'Percentage'),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     
@@ -882,7 +971,15 @@ shinyApp(
                              side = "right"),
                yaxis = list(name = "Number of Physicans with Perception Progression"),
                xaxis = list(name = "Quarter"),
-               title = "Tracking of Perception Progression in Overall Physician")
+               title = "Tracking of Perception Progression in Overall Physician",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     observe({
@@ -921,7 +1018,15 @@ shinyApp(
                              side = "right"),
                yaxis = list(name = "Number of Physicans with Perception Progression"),
                xaxis = list(name = "Quarter"),
-               title = paste("Perception progression in", input$field, input$item, sep = " "))
+               title = paste("Perception progression in", input$field, input$item, sep = " "),
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     ##-- 2.2
@@ -966,7 +1071,7 @@ shinyApp(
     })
     
     tmp_smmy_psc_qtr_smmy_tier <- reactive({
-      smmy_psc_qtr_smmy_tier %>%
+      tmp <- smmy_psc_qtr_smmy_tier %>%
         group_by(Quarter) %>%
         do(plyr::rbind.fill(., data.frame(Quarter = first(.$Quarter),
                                           doctor.tier = "Total",
@@ -983,6 +1088,11 @@ shinyApp(
         mutate(Quarter = paste(Year, Quarter, sep = "")) %>%
         select(-total, -adv, -Year, -adv_ratio) %>%
         gather(item, ratio, -doctor.tier, -Quarter)
+      
+      tmp$doctor.tier <- factor(tmp$doctor.tier, 
+                                levels = c("Total", "A", "B", "C", "U", NA))
+      
+      tmp
     })
     
     
@@ -996,7 +1106,15 @@ shinyApp(
                              input$year3, input$quarter3, sep = ""),
                xaxis = list(title = 'Region'),
                yaxis = list(title = 'Percentage'),
-               barmode = "stack")
+               barmode = "stack",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     output$department_stk_pb_var <- renderPlotly({
@@ -1009,7 +1127,15 @@ shinyApp(
                              input$year3, input$quarter3, sep = ""),
                xaxis = list(title = 'Department'),
                yaxis = list(title = 'Percentage'),
-               barmode = "stack")
+               barmode = "stack",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     output$tier_stk_pb_var <- renderPlotly({
@@ -1022,7 +1148,15 @@ shinyApp(
                              input$year3, input$quarter3, sep = ""),
                xaxis = list(title = 'Doctor Level'),
                yaxis = list(title = 'Percentage'),
-               barmode = "stack")
+               barmode = "stack",
+               autosize = T,
+               margin =  list(
+                 l = 100,
+                 r = 50,
+                 b = 100,
+                 t = 100,
+                 pad = 4
+               ))
     })
     
     ##-- 2.3
@@ -1041,7 +1175,8 @@ shinyApp(
         filter(!is.na(adv_flag)) %>%
         mutate(flag = ifelse(adv_flag == 1, "Physicians with Progress",
                              "Overall Physicians"),
-               doc_cnt_pct = doc_cnt / doc_cnt_total)
+               doc_cnt_pct = ifelse(adv_flag == 1, doc_cnt / doc_cnt_total_adv,
+                                    doc_cnt / doc_cnt_total))
     })
     
     tmp_eda_dat_16_q_adv <- reactive({
@@ -1059,7 +1194,8 @@ shinyApp(
         filter(!is.na(adv_flag)) %>%
         mutate(flag = ifelse(adv_flag == 1, "Physicians with Progress",
                              "Overall Physicians"),
-               doc_cnt_pct = doc_cnt / doc_cnt_total)
+               doc_cnt_pct = ifelse(adv_flag == 1, doc_cnt / doc_cnt_total_adv,
+                                    doc_cnt / doc_cnt_total))
     })
     
     output$q15_bar_adv <- renderPlotly({
