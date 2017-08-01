@@ -422,7 +422,6 @@ meeting_dat<-data.frame('quarter'=paste(year(meeting_dat$imeeting.time),quarters
 recent.time<-newdata%>%group_by(doctorid)%>%dplyr::summarise(most.recent.modify.date=max(most.recent.modify.date))
 get.hcp<-unique(newdata[,c(1,2,3,4,9)])
 p19_tmp1<-merge(recent.time,get.hcp)
-View(p19_tmp1)
 p19_tmp1<-p19_tmp1[,c(1,4,5)]
 p19_tmp2<-meeting_dat[,c(7,8,13)]
 p19_tmp2<-merge(p19_tmp1,p19_tmp2)
@@ -506,7 +505,6 @@ p20_first <- plot_ly(p20_tmp4, x = ~quarter, y = ~average, type = 'scatter', mod
 ## Picture 2 每月不同观念医生接受拜访的平均次数
 ## Quarter i
 p20_tmp5<-call_dat[,c(1,4)]
-View(call_dat)
 p20_tmp5<-merge(p20_tmp5,get.hcp2)
 
 
@@ -529,10 +527,9 @@ p20_second <- plot_ly(p20_tmp8, x = ~quarter, y = ~average, type = 'scatter', mo
 ## picture 1 每季度观念进阶医生出席会议的平均次数
 p21_tmp1 <- meeting_dat[,c(1,7,8,13)]
 rbind(1:ncol(meeting_dat),colnames(meeting_dat))
-View(p21_tmp1)
 ##进阶医生
 x<-nn[which(nn$value>0),]
-p21_tmp2 <- p21_tmp1%>%group_by(quarter,doctorid)%>%dplyr::summarise(counts=n())
+p21_tmp2 <- p21_tmp1%>%group_by(quarter,imeeting.type,doctorid)%>%dplyr::summarise(counts=n())
 p21_tmp2$quarter<-as.character(p21_tmp2$quarter)
 x$doctorid<-as.character(x$doctorid)
 p21_tmp3 <- merge(p21_tmp2,x)
@@ -547,6 +544,7 @@ rbind(1:ncol(newdata),colnames(newdata))
 p21_tmp5<-unique(newdata[,c(2,3)])
 p21_tmp5$quarter<-as.character(p21_tmp5$quarter)
 p21_tmp6<-merge(p21_tmp2,p21_tmp5)
+View(p21_tmp6)
 p21_tmp7<-p21_tmp6%>%group_by(quarter,imeeting.type)%>%dplyr::summarise(average=mean(counts))
 
 p21_tmp8<-plyr::rbind.fill(p21_tmp4, data_frame(type='全部受访医生',
@@ -570,17 +568,26 @@ p21_2_tmp3 <- merge(p21_2_tmp2,x)
 
 
 p21_2_tmp4 <- p21_2_tmp3%>%group_by(quarter,region)%>%dplyr::summarise(average=mean(counts))
-p21_2_tmp4$average<-round(p21_2_tmp4$average,1)
+p21_2_tmp8 <- p21_2_tmp3%>%group_by(quarter)%>%dplyr::summarise(average=mean(counts))
+p21_2_tmp4 <- plyr::rbind.fill(p21_2_tmp4,data.frame(quarter=p21_2_tmp8$quarter,
+                                          region='全国',
+                                          average=p21_2_tmp8$average))
+
 p21_2_tmp4<-data.frame('type'='进阶医生',p21_2_tmp4)
 
 ##全部受访医生
-p21_2_tmp5<-merge(p21_2_tmp2,p21_tmp5)
+p21_2_tmp5<-merge(p21_2_tmp2,p21_2_tmp4)
 p21_2_tmp6<-p21_2_tmp5%>%group_by(quarter,region)%>%dplyr::summarise(average=mean(counts))
-
+p21_2_tmp9 <- p21_2_tmp5%>%group_by(quarter)%>%dplyr::summarise(average=mean(counts))
+p21_2_tmp6 <- plyr::rbind.fill(p21_2_tmp6,data.frame(quarter=p21_2_tmp9$quarter,
+                               region='全国',
+                               average=p21_2_tmp9$average))
 p21_2_tmp7<-plyr::rbind.fill(p21_2_tmp4, data_frame(type='全部受访医生',
                                                     quarter=p21_2_tmp6$quarter,
                                                     region=p21_2_tmp6$region,
                                                     average=p21_2_tmp6$average))
+p21_2_tmp7$average<-round(p21_2_tmp7$average,1)
+
 p21_second <- plot_ly(p21_2_tmp7, x = ~region, y = ~average, type = 'bar',color=~type) %>%
   layout(xaxis = list(title = "", tickangle = -45),
          yaxis = list(title = ""),
@@ -619,8 +626,6 @@ p22_tmp7<-p22_tmp6%>%group_by(quarter)%>%dplyr::summarise(average=mean(counts))
 p22_tmp8<-plyr::rbind.fill(p22_tmp4, data_frame(type='全部受访医生',
                                                 quarter=p22_tmp7$quarter,
                                                 average=p22_tmp7$average))
-ggplot(data = p22_tmp8, mapping = aes(x = factor(quarter), y = average, color = type)) + 
-  geom_point()+geom_line(aes(colour=type, group=type))
 
 p22_first <- plot_ly(p22_tmp8, x = ~quarter, y = ~average, type = 'scatter', mode = 'lines', color = ~type) %>%
   layout(title = '每季度观念进阶医生出席会议的平均次数',
@@ -629,7 +634,6 @@ p22_first <- plot_ly(p22_tmp8, x = ~quarter, y = ~average, type = 'scatter', mod
 
 
 ## picture 2 每月观念进阶医生接受拜访的平均次数（可用于各类维度）
-View(call_dat)
 p22_2_tmp1 <- call_dat[,c(1,4)]
 
 ##进阶医生
