@@ -5,12 +5,10 @@
 # Date:         07-31-2017
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
-install.packages('plotly')
 library(zoo)
 library(plyr) 
 library(openxlsx)
 library(dplyr)
-library(ggplot2)
 library(lubridate)
 library(gtable)
 library(grid)
@@ -18,28 +16,40 @@ library(tidyr)
 library(plotly)
 
 
-
-
-
-
-
 ##-- formating data
 ##-- update data
 ## 数据处理：保留每个医生每月最新的一次记录
 #first distinct over all elements
-to_use_data<-unique(eda_dat[,c(1,5,7,8,9,10,11,13)]) 
-to_use_data<-data.frame('quarter'=paste(year(to_use_data$most.recent.modify.date),
+meeting_dat<-data.frame('quarter'=paste(year(meeting_dat$imeeting.time),quarters(meeting_dat$imeeting.time)),meeting_dat)
+call_dat<-data.frame('quarter'=paste(year(call_dat$call.date),quarters(call_dat$call.date)),call_dat)
+
+eda_dat<-eda_dat[eda_dat$target.department=="Y",]
+to_use_data <- unique(eda_dat[,c(1,5,7,8,9,10,11,12,13)]) 
+to_use_data <- data.frame('quarter'=paste(year(to_use_data$most.recent.modify.date),
                                         quarters(to_use_data$most.recent.modify.date)),to_use_data)
-to_use_data$hcp.major<-as.numeric(to_use_data$hcp.major)
-##  取每日hcp.major最大的记录
-data1<-to_use_data %>% group_by(most.recent.modify.date,doctorid)%>%
-  dplyr::summarise(hcp.major=max(hcp.major))  #second distinct over day
-data1.tmp<-merge(data1,to_use_data)
-## 取每月最新的记录
-data2<-data1.tmp %>% group_by(quarter,doctorid)%>%    #third distinct over month
-  dplyr::summarise(most.recent.modify.date=max(most.recent.modify.date))
-newdata<-merge(data1.tmp,data2)
-#View(newdata)
+to_use_data$hcp.major <- as.numeric(to_use_data$hcp.major)
+
+
+# ##  取每日hcp.major最大的记录
+# data1 <- to_use_data %>% 
+#   group_by(most.recent.modify.date,doctorid) %>%
+#   dplyr::summarise(hcp.major=max(hcp.major))  #second distinct over day
+# data1.tmp <- inner_join(data1,to_use_data)
+# 
+# length(unique(data1.tmp[which(data1.tmp$quarter=='2016 Q3'&data1.tmp$hcp.major==1),]$doctorid))
+# ## 取每季度最新的记录
+# data2 <- to_use_data %>% 
+#   group_by(quarter,doctorid) %>%    #third distinct over month
+#   dplyr::summarise(most.recent.modify.date=max(most.recent.modify.date))
+# 
+# newdata <- inner_join(data1.tmp,data2,by = c("quarter", "most.recent.modify.date", "doctorid"))
+
+rownumber<- to_use_data %>% 
+  group_by(quarter,docotr.id,most.recent.modify.date) %>%
+  arrange(doctorid,most.recent.modify.date) %>%
+  
+  
+
 
 # newdata$quarter<-as.character(newdata$quarter)
 # newdata$quarter
@@ -64,27 +74,24 @@ newdata<-merge(data1.tmp,data2)
 
 
 ## part1 受访医生概况
-
-
-
-
 ## p10
 ## 每季度受访医生数目递增情况及总体分析人数
 p10_tmp1<-tbl_df(newdata) %>% 
   group_by(quarter) %>%
-  dplyr::summarize(counts=n_distinct(doctorid))
-p10_tmp2<-data.frame(p10_tmp1,difference=c(0,diff(p10_tmp1$counts)))
+  dplyr::summarize(counts=n_distinct(doctorid)) %>%
+  dplyr::mutate(difference=c(0,diff(counts)))
 
-ay <- list(
-  tickfont = list(color = "red"),
-  overlaying = "y",
-  side = "right",
-  title = ""
-)
-p10 <- p10_tmp2 %>% plot_ly(x = ~quarter, y = ~difference, name = "新增", type = "bar") %>%
+
+p10 <- 
+  plot_ly(p10_tmp1,x = ~quarter, y = ~difference, name = "新增", type = "bar") %>%
   add_trace(y = ~counts, name = '总数',mode='lines',type='scatter',yaxis = "y2") %>%
   layout(
-    title = "受访医生总数及每季度新增人数", yaxis2 = ay,
+    title = "受访医生总数及每季度新增人数",
+    yaxis2 = list(
+      tickfont = list(color = "red"),
+      overlaying = "y",
+      side = "right",
+      title = ""),
     xaxis = list(title="")
   )
 
@@ -93,36 +100,40 @@ p10 <- p10_tmp2 %>% plot_ly(x = ~quarter, y = ~difference, name = "新增", type
 
 ## p11
 ## 每季度受访医生的总体分布情况
-## suppose quarter i
-i<-'2016 Q3'
 ## picture 1 大区分布
-P11_p1<-newdata[newdata$quarter==i,]%>%
-  group_by(region)%>%
+i <- '2016 Q3'
+p11_p1 <- newdata %>%
+  group_by(quarter,region) %>%
   dplyr::summarise(counts=n_distinct(doctorid))
-View(P11_p1)
 
-
-p11_first <- newdata[newdata$quarter==i,] %>%
-  group_by(region) %>%
-  dplyr::summarize(counts = n_distinct(doctorid)) %>%
-  plot_ly(labels = ~region, values = ~counts) %>%
+p11_first <- 
+  plot_ly(p11_p1[p11_p1$quarter==i,],labels = ~region, values = ~counts) %>%
   add_pie(hole = 0.6) %>%
   layout(title = "大区分布",  showlegend = T,
          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
+## picture 3 医生等级分布
+View(call_dat)
+rbind(1:ncol(call_dat),colnames(call_dat))
+p11_tmp1 <-call_dat[,c(1,4,12)] 
+p11_tmp1$doctorid<-as.character(p11_tmp1$doctorid)
+p11_tmp2<- inner_join(p11_tmp1,newdata,by = c("quarter", "doctorid"))
 
+p11_tmp3 <- p11_tmp2 %>%
+  group_by(quarter,doctor.tier) %>%
+  dplyr::summarise(counts=n_distinct(doctorid)) %>%
+  do(plyr::rbind.fill(.,data.frame(quarter=first(.$quarter),
+                                   doctor.tier="全部",
+                                   counts=sum(.$counts))))
 
 ## picture 4 科室分布
-P11_p4<-newdata%>%
-  group_by(quarter,department)%>%
+p11_p4 <- newdata %>%
+  group_by(quarter,department) %>%
   dplyr::summarise(counts=n_distinct(doctorid))
 
-
-p11_fourth <- newdata[newdata$quarter==i,] %>%
-  group_by(department) %>%
-  dplyr::summarize(counts = n_distinct(doctorid)) %>%
-  plot_ly(labels = ~department, values = ~counts) %>%
+p11_fourth <- 
+  plot_ly(p11_p4[newdata$quarter==i,],labels = ~department, values = ~counts) %>%
   add_pie(hole = 0.6) %>%
   layout(title = "科室分布",  showlegend = T,
          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
@@ -130,22 +141,21 @@ p11_fourth <- newdata[newdata$quarter==i,] %>%
 
 
 
-
-
-
-
-## p12 每月各个观念级别的受访医生数目及比例变化情况
-p12_tmp1<-newdata%>% group_by(quarter,hcp.major)%>%
+## p12 每季度各个观念级别的受访医生数目及比例变化情况
+p12_tmp1 <- newdata %>% 
+  group_by(quarter,hcp.major) %>%
   dplyr::summarise(counts=n_distinct(doctorid))
 
-p12_first <-plot_ly(ungroup(p12_tmp1), x = ~factor(quarter), y = ~counts, type = 'scatter', mode='lines',color=~factor(hcp.major)) %>%
+p12_first <-
+  plot_ly(ungroup(p12_tmp1), x = ~factor(quarter), y = ~counts, type = 'scatter', mode='lines',color=~factor(hcp.major)) %>%
   layout(title = "每季度医生观念级别变化情况",  showlegend = T,
          xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
          yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T))
   
 
 
-p12_second <- plot_ly(ungroup(p12_tmp1), x = ~factor(quarter), y = ~counts, type = 'bar',color=~factor(hcp.major)) %>%
+p12_second <- 
+  plot_ly(ungroup(p12_tmp1), x = ~factor(quarter), y = ~counts, type = 'bar',color=~factor(hcp.major)) %>%
     layout(title = "每季度医生观念级别变化情况",  showlegend = T,
          xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
          yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T), 
@@ -155,46 +165,65 @@ p12_second <- plot_ly(ungroup(p12_tmp1), x = ~factor(quarter), y = ~counts, type
 
 ## p13 每季度不同观念级别医生的分布情况
 ## picture 1 大区分布  
-p13_tmp1 <- newdata 
-p13_tmp1$quarter<-as.character(p13_tmp1$quarter)
-p13_tmp2 <- p13_tmp1 %>% group_by(quarter,hcp.major,region) %>%
+p13_tmp1 <- newdata %>% 
+  group_by(quarter,hcp.major,region) %>%
   dplyr::summarise(counts = n_distinct(doctorid)) %>%
   do(plyr::rbind.fill(., data_frame(quarter = first(.$quarter),
                                     hcp.major=first(.$hcp.major),
                                     region = '全国',
                                     counts=sum(.$counts))))
-
 ## quarter i
-p13_first <- plot_ly(ungroup(p13_tmp2[p13_tmp2$quarter == i, ]), x = ~factor(region), y = ~counts,color = ~factor(hcp.major), type = 'bar') %>%
+p13_first <- 
+  plot_ly(ungroup(p13_tmp1[p13_tmp1$quarter == i, ]), x = ~factor(region), y = ~counts,color = ~factor(hcp.major), type = 'bar') %>%
   layout(title = "大区分布",  showlegend = T,
          xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
          yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T), 
          barmode = 'stack')
 
+## picture 3 医生等级分布
+p13_tmp3 <-call_dat[,c(1,4,12)] 
+p13_tmp3$doctorid<-as.character(p13_tmp3$doctorid)
+p13_tmp4<- inner_join(p13_tmp3,newdata,by = c("quarter", "doctorid"))
+
+View(p13_tmp4)
+p13_tmp5 <- p13_tmp4 %>%
+  group_by(quarter,hcp.major,doctor.tier) %>%
+  dplyr::summarise(counts=n_distinct(doctorid)) %>%
+  do(plyr::rbind.fill(.,data.frame(quarter=first(.$quarter),
+                                   doctor.tier="全部",
+                                   hcp.major=first(.$hcp.major),
+                                   counts=sum(.$counts))))
+## quarter j
+j<-'2017 Q1'
+p13_third <- 
+  plot_ly(ungroup(p13_tmp5[p13_tmp5$quarter == j, ]), x = ~factor(doctor.tier), y = ~counts,color = ~factor(hcp.major), type = 'bar') %>%
+  layout(title = "医生等级分布",  showlegend = T,
+         xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
+         yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T), 
+         barmode = 'stack')
 
 ## picture 4 科室分布
-p13_tmp3 <- p13_tmp1 %>% group_by(quarter,hcp.major,department) %>%
+p13_tmp2 <- newdata %>% 
+  group_by(quarter,hcp.major,department) %>%
   dplyr::summarise(counts = n_distinct(doctorid)) %>%
   do(plyr::rbind.fill(., data_frame(quarter = first(.$quarter),
                                     hcp.major=first(.$hcp.major),
                                     department = '全部科室',
                                     counts=sum(.$counts))))
 ## quarter i
-p13_fourth <- plot_ly(ungroup(p13_tmp3[p13_tmp3$quarter == i, ]), x = ~factor(department), y = ~counts,color=~factor(hcp.major), type = 'bar') %>%
+p13_fourth <- 
+  plot_ly(ungroup(p13_tmp2[p13_tmp2$quarter == i, ]), x = ~factor(department), y = ~counts,color=~factor(hcp.major), type = 'bar') %>%
   layout(title = "科室分布",  showlegend = T,
          xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
          yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T), 
          barmode = 'stack')
-p13_fourth
-
-
 
 
 
 ## p14  不同观念级别医生对斯皮仁诺及其推广活动的接受和认可情况
 ## picture 1 对斯皮仁诺优势的认可情况
 p14_tmp1<-newdata[grep('Q15',newdata$questions),]
-p14_tmp1$quarter<-factor(p14_tmp1$quarter)
+
 p14_tmp2<-separate_rows(p14_tmp1,answers,sep=';')
 
 p14_tmp3<-p14_tmp2 %>% 
@@ -255,35 +284,31 @@ P14_second <- plot_ly(p14_tmp10[p14_tmp10$quarter==i,], x = ~factor(hcp.major), 
 
 ## p15 每季度进阶医生的总体及在某一特定维度中的变化情况
 #View(newdata)
+p15_tmp1 <- unique(newdata[,c(2,3,4,6,10)]) %>%
+  spread(quarter,hcp.major) 
+p15_tmp2 <- p15_tmp1 %>%
+  t(.[,4:ncol(.)]) %>%
+  na.locf(.) 
+  
 rbind(1:ncol(newdata),colnames(newdata))
-p15_tmp1 <- unique(newdata[,c(2,3,4,5,6,9)])
-nrow(p15_tmp1)  # in total 2961 observations
-length(unique(p15_tmp1$doctorid))  #in total 2642 doctors been interviewed 
+p15_tmp1 <- unique(newdata[,c(2,3,4,6,10)])
 ## 将日期列转为行变量
 p15_tmp2 <- p15_tmp1 %>% spread(quarter,hcp.major)
-colnames(p15_tmp2)
-nrow(p15_tmp2)     # confirmed  2642 observations after spread()
-
 
 ## use locf to impute missing hcp.majors and get lag between nearest two months
 #View(p15_tmp2)
 rbind(1:ncol(p15_tmp2),colnames(p15_tmp2))
-x <- t(p15_tmp2[,5:ncol(p15_tmp2)])  ## 2642 observations confirmed & in total 12months
-View(x)
-ncol(x)
-nrow(x)
+x <- t(p15_tmp2[,4:ncol(p15_tmp2)])  ## 2642 observations confirmed & in total 12months
 ## 
 y <- na.locf(x)
-View(y)
+y[is.na(y)]<-1
 z <- diff(y)  ## 11 lags confirmed & 2642 observations confirmed &
-View(z)
-nn <- cbind(p15_tmp2[,1:4],t(z))
-nn<-nn%>% gather(quarter,value,-c(doctorid,hospital,department,region))
-View(nn)
+nn <- cbind(p15_tmp2[,1:3],t(z))
+nn<-nn%>% gather(quarter,value,-c(doctorid,department,region))
 
 ## nn 
-#    doctorid             hospital   department  region     quarter    value
-# 1 10000574   中山大学附属第一医院     皮肤科    粤桂琼    2017 Q1      0       
+#    doctorid              department  region     quarter    value
+# 1 10000574                 皮肤科    粤桂琼    2017 Q1      0       
 
 
 
@@ -292,15 +317,21 @@ pro<-function(data){
   length(which(data>0))
 }
 no.pro<-apply(t(z),2,pro)
-p15_tmp1<-data.frame(p10_tmp2[2:nrow(p10_tmp2),1:2],no.pro)
+doc.no.quarter<-newdata %>% group_by(quarter) %>%dplyr::summarise(counts=n_distinct(doctorid))
+p15_tmp1<-data.frame(doc.no.quarter[2:nrow(doc.no.quarter),1:2],no.pro)
 p15_tmp1<-data.frame(p15_tmp1,'percentage'=round(p15_tmp1$no.pro/p15_tmp1$counts*100,0))
-View(p15_tmp1)
+
 
 ## picture1
 p15_first <- plot_ly(p15_tmp1,x = ~quarter, y = ~no.pro, name = "进阶医生数", type = "bar") %>%
   add_trace(y = ~percentage, name = '进阶医生比例',mode='lines',type='scatter',yaxis = "y2") %>%
   layout(
-    title = "每季度的总体观念进阶医生", yaxis2 = ay,
+    title = "每季度的总体观念进阶医生",
+    yaxis2 = list(
+      tickfont = list(color = "red"),
+      overlaying = "y",
+      side = "right",
+      title = ""),
     xaxis = list(title="")
   )
 
@@ -310,18 +341,19 @@ p15_first <- plot_ly(p15_tmp1,x = ~quarter, y = ~no.pro, name = "进阶医生数
 ## Quarter i 
 i<-'2016 Q4'
 ## Picture 1 大区等级
-p16_tmp1<-nn[nn$quarter==i,]%>% group_by(region)%>%
+p16_tmp1<-nn%>% group_by(quarter,region)%>%
   summarise(no.pro=pro(value))
+View(p16_tmp1)
+View(nn)
 
 ##每个区域受访医生
 doc.no.region<-newdata%>%group_by(quarter,region)%>%dplyr::summarise(counts=n_distinct(doctorid))
-View(doc.no.region)
-p16_tmp2<-merge(p16_tmp1,doc.no.region[doc.no.region$quarter==i,])
-p16_tmp2<-data.frame('region'=p16_tmp2$region,'progressed'=p16_tmp2$no.pro,'not.progressed'=(p16_tmp2$counts-p16_tmp2$no.pro))
-View(p16_tmp2)
-p16_tmp3<-gather(p16_tmp2,type,value,-region)
-p16_tmp3<-p16_tmp3%>%group_by(type)%>%
+p16_tmp2<-merge(p16_tmp1,doc.no.region)
+p16_tmp2<-data.frame('quarter'=p16_tmp2$quarter,'region'=p16_tmp2$region,'progressed'=p16_tmp2$no.pro,'not.progressed'=(p16_tmp2$counts-p16_tmp2$no.pro))
+p16_tmp3<-gather(p16_tmp2,type,value,-c(quarter,region))
+p16_tmp3<-p16_tmp3%>%group_by(quarter,type)%>%
   do(plyr::rbind.fill(., data_frame(type = first(.$type),
+                                    quarter=first(.$quarter),
                                     region = c("全国"),
                                     value=sum(.$value))))
 
@@ -332,20 +364,48 @@ p16_first <- plot_ly(p16_tmp3, x = ~region, y = ~value,color=~type, type = 'bar'
          yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T), 
          barmode = 'stack')
 
+## picture 3 医生等级分布
+p16_p3_1 <-call_dat[,c(1,4,12)] 
+p16_p3_1$doctorid<-as.character(p16_p3_1$doctorid)
+p16_p3_2<- unique(inner_join(p16_p3_1,nn,by = c("quarter", "doctorid")))
+
+nrow(p16_p3_2[p16_p3_2$quarter==j&p16_p3_2$value>0,])
+
+p16_p3_3<-p16_p3_2%>% group_by(quarter,doctor.tier)%>%
+  summarise(no.pro=pro(value)) %>%
+  do(plyr::rbind.fill(.,data.frame(quarter=first(.$quarter),
+                                   doctor.tier="全部",
+                                   no.pro=sum(.$no.pro))))
+p16_p3_4 <- p13_tmp4 %>%
+  group_by(quarter,doctor.tier) %>%
+  dplyr::summarise(counts=n_distinct(doctorid)) %>%
+  do(plyr::rbind.fill(.,data.frame(quarter=first(.$quarter),
+                                   doctor.tier="全部",
+                                   counts=sum(.$counts))))
+p16_p3_5<- full_join(p16_p3_3,p16_p3_4,by = c("quarter", "doctor.tier"))
+p16_p3_5<- data.frame(p16_p3_5,'not.pro'=p16_p3_5$counts-p16_p3_5$no.pro)
+p16_p3_6<- gather(p16_p3_5,type,value,c(no.pro,not.pro))
+p16_third <- plot_ly(p16_p3_6, x = ~doctor.tier, y = ~value,color=~type, type = 'bar') %>%
+  layout(title = "医生等级",  showlegend = T,
+         xaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T),
+         yaxis = list(title = "",showgrid = T, zeroline = T, showticklabels = T), 
+         barmode = 'stack')
 
 ## Picture 4 科室分布
-p16_tmp4<-nn[nn$quarter==i,]%>% group_by(department)%>%
+p16_tmp4<-nn%>% group_by(quarter,department)%>%
   summarise(no.pro=pro(value))
+View(p16_tmp4)
 
 ##每个科室受访医生
 doc.no.dep<-newdata%>%group_by(quarter,department)%>%dplyr::summarise(counts=n_distinct(doctorid))
-p16_tmp5<-merge(p16_tmp4,doc.no.dep[doc.no.dep$quarter==i,])
+p16_tmp5<-merge(p16_tmp4,doc.no.dep)
 p16_tmp4<-data.frame('department'=p16_tmp5$department,'progressed'=p16_tmp5$no.pro,'not.progressed'=(p16_tmp5$counts-p16_tmp5$no.pro))
 View(p16_tmp4)
 p16_tmp4<-gather(p16_tmp4,type,value,-department)
 p16_tmp4<-p16_tmp4%>%group_by(type)%>%
   do(plyr::rbind.fill(., data_frame(type = first(.$type),
                                     department = c("全部科室"),
+                                    
                                     value=sum(.$value))))
 p16_fourth <- plot_ly(p16_tmp3, x = ~department, y = ~value,color=~type, type = 'bar') %>%
   layout(title = "科室分布",  showlegend = T,
@@ -361,7 +421,7 @@ p16_fourth <- plot_ly(p16_tmp3, x = ~department, y = ~value,color=~type, type = 
 ## Quarter i
 ##进阶医生
 number.progressed<-length(which(nn$quarter==i&nn$value>0))
-p17_tmp1<-merge(newdata,nn[which(nn$quarter==i&nn$value>0),c(1,5)])
+p17_tmp1<-merge(newdata[newdata$quarter==i,],nn[which(nn$quarter==i&nn$value>0),c(1,5)])
 p17_tmp1<-p17_tmp1[grep('Q15',p17_tmp1$questions),]
 p17_tmp1<-separate_rows(p17_tmp1,answers,sep=';')
 p17_tmp1<-p17_tmp1%>%group_by(answers)%>%dplyr::summarise(counts=n())
@@ -371,7 +431,9 @@ number.all<-length(unique(newdata[which(newdata$quarter==i),]$doctorid))
 p17_tmp2<-newdata[which(newdata$quarter==i),]
 p17_tmp2<-p17_tmp2[grep('Q15',p17_tmp2$questions),]
 p17_tmp2<-separate_rows(p17_tmp2,answers,sep=';')
-p17_tmp2<-p17_tmp2%>%group_by(answers)%>%dplyr::summarise(counts=n())
+
+
+p17_tmp2<-p17_tmp2%>%group_by(answers)%>%dplyr::summarise(counts=n_distinct(doctorid))
 p17_tmp2<-data.frame('type'='全部受访医生',p17_tmp2,'total'=number.all,'percentage'=round((p17_tmp2$counts/number.all*100),0))
 
 p17_tmp3<-rbind(p17_tmp1,p17_tmp2)
@@ -383,12 +445,11 @@ p17_first <- plot_ly(p17_tmp3, x = ~percentage, y = ~answers, type = 'bar',color
          barmode = 'group')
 
 
-
 ## Picture 2 观念进阶医生对斯皮仁诺推广活动的认可程度（Q16）
 ## quarter i
 ##进阶医生
 number.progressed<-length(which(nn$quarter==i&nn$value>0))
-p17_tmp4<-merge(newdata,nn[which(nn$quarter==i&nn$value>0),c(1,5)])
+p17_tmp4<-merge(newdata[newdata$quarter==i,],nn[which(nn$quarter==i&nn$value>0),c(1,5)])
 p17_tmp4<-p17_tmp4[grep('Q16',p17_tmp4$questions),]
 p17_tmp4<-separate_rows(p17_tmp4,answers,sep=';')
 p17_tmp4<-p17_tmp4%>%group_by(answers)%>%dplyr::summarise(counts=n())
@@ -398,10 +459,11 @@ number.all<-length(unique(newdata[which(newdata$quarter==i),]$doctorid))
 p17_tmp5<-newdata[which(newdata$quarter==i),]
 p17_tmp5<-p17_tmp5[grep('Q16',p17_tmp5$questions),]
 p17_tmp5<-separate_rows(p17_tmp5,answers,sep=';')
-p17_tmp5<-p17_tmp5%>%group_by(answers)%>%dplyr::summarise(counts=n())
+p17_tmp5<-p17_tmp5%>%group_by(answers)%>%dplyr::summarise(counts=n_distinct(doctorid))
 p17_tmp5<-data.frame('type'='all',p17_tmp5,'total'=number.all,'percentage'=round((p17_tmp5$counts/number.all*100),0))
 
 p17_tmp6<-rbind(p17_tmp4,p17_tmp5)
+View(p17_tmp6)
 p17_second <- plot_ly(p17_tmp6, x = ~percentage, y = ~answers, type = 'bar',color=~type, orientation = 'h') %>%
   layout(xaxis = list(title = "", tickangle = -45),
          yaxis = list(title = ""),
@@ -416,25 +478,25 @@ p17_second <- plot_ly(p17_tmp6, x = ~percentage, y = ~answers, type = 'bar',colo
 
 ## p19
 ## Picture 1 不同观念级别的医生出席会议的平均次数
-## 取每个医生最近一次拜访得到的观念
-## 每个医生最近一次拜访的时间及其ID
-meeting_dat<-data.frame('quarter'=paste(year(meeting_dat$imeeting.time),quarters(meeting_dat$imeeting.time)),meeting_dat)
 recent.time<-newdata%>%group_by(doctorid)%>%dplyr::summarise(most.recent.modify.date=max(most.recent.modify.date))
 get.hcp<-unique(newdata[,c(1,2,3,4,9)])
 p19_tmp1<-merge(recent.time,get.hcp)
-p19_tmp1<-p19_tmp1[,c(1,4,5)]
-p19_tmp2<-meeting_dat[,c(7,8,13)]
+rbind(1:ncol(newdata),colnames(newdata))
+p19_tmp1<-unique(newdata[,c(1,2,3,4,9,10)])
+p19_tmp2<-meeting_dat[,c(1,7,8,13)]
 p19_tmp2<-merge(p19_tmp1,p19_tmp2)
-p19_tmp3<-p19_tmp2%>%group_by(imeeting.type,hcp.major,doctorid)%>%
+p19_tmp3<-p19_tmp2%>%group_by(quarter,imeeting.type,hcp.major,doctorid)%>%
   dplyr::summarise(counts=n())%>%
   dplyr::summarise(average=mean(counts))
-p19_all1<-p19_tmp2%>%group_by(imeeting.type,doctorid)%>%
+p19_all1<-p19_tmp2%>%group_by(quarter,imeeting.type,doctorid)%>%
   dplyr::summarise(counts=n())%>%
   dplyr::summarise(average=mean(counts))
-p19_tmp4<-plyr::rbind.fill(p19_tmp3, data_frame(imeeting.type = p19_all1$imeeting.type,
+p19_tmp4<-plyr::rbind.fill(p19_tmp3, data_frame(quarter=p19_all1$quarter,
+                                                imeeting.type = p19_all1$imeeting.type,
                                                 hcp.major = c("All"),
                                                 average=p19_all1$average))
 p19_tmp4$average<-round(p19_tmp4$average,1)
+View(p19_tmp4)
 
 p19_first <- plot_ly(p19_tmp4, x = ~imeeting.type, y = ~average, type = 'bar',color=~factor(hcp.major)) %>%
   layout(xaxis = list(title = "", tickangle = -45),
@@ -442,35 +504,37 @@ p19_first <- plot_ly(p19_tmp4, x = ~imeeting.type, y = ~average, type = 'bar',co
          margin = list(b = 100),
          barmode = 'group')
 ## Picture 2 不同观念医生接受拜访的平均次数
-call_dat<-data.frame('quarter'=paste(year(call_dat$call.date),quarters(call_dat$call.date)),call_dat)
 rbind(c(1:ncol(call_dat)),colnames(call_dat))
 p19_tmp5<-call_dat[,c(1,4)]
 p19_tmp6<-merge(p19_tmp5,p19_tmp1)
 #View(p19_tmp6)
 ##地区
-p19_tmp7<-p19_tmp6%>%group_by(region,hcp.major,doctorid)%>%
+p19_tmp7<-p19_tmp6%>%group_by(quarter,region,hcp.major,doctorid)%>%
   dplyr::summarise(counts=n())%>%
   dplyr::summarise(average=mean(counts))
-p19_all2<-p19_tmp6%>%group_by(region,doctorid)%>%
+p19_all2<-p19_tmp6%>%group_by(quarter,region,doctorid)%>%
   dplyr::summarise(counts=n())%>%
   dplyr::summarise(average=mean(counts))
-p19_tmp8<-plyr::rbind.fill(p19_tmp7, data_frame(region = p19_all2$region,
+p19_tmp8<-plyr::rbind.fill(p19_tmp7, data_frame(quarter=p19_all2$quarter,
+                                                region = p19_all2$region,
                                                 hcp.major = c("All"),
                                                 average=p19_all2$average))
 ##全国
-p19_tmp9<-p19_tmp6%>%group_by(hcp.major,doctorid)%>%
+p19_tmp9<-p19_tmp6%>%group_by(quarter,hcp.major,doctorid)%>%
   dplyr::summarise(counts=n())%>%
   dplyr::summarise(average=mean(counts))
 p19_tmp9<-data.frame(p19_tmp9,'region'='全国')
-p19_tmp10<-p19_tmp6%>%group_by(doctorid)%>%
+p19_tmp10<-p19_tmp6%>%group_by(quarter,doctorid)%>%
   dplyr::summarise(counts=n())%>%
   dplyr::summarise(average=mean(counts))
 p19_tmp10<-data.frame(p19_tmp10,'region'='全国')
-p19_tmp11<-plyr::rbind.fill(p19_tmp9, data_frame(region = p19_tmp10$region,
+p19_tmp11<-plyr::rbind.fill(p19_tmp9, data_frame(quarter=p19_tmp10$quarter,
+                                                 region = p19_tmp10$region,
                                                 hcp.major = c("All"),
                                                 average=p19_tmp10$average))
 
-p19_tmp12<-plyr::rbind.fill(p19_tmp8, data_frame(region = p19_tmp11$region,
+p19_tmp12<-plyr::rbind.fill(p19_tmp8, data_frame(quarter=p19_tmp11$quarter,
+                                                 region = p19_tmp11$region,
                                                  hcp.major = p19_tmp11$hcp.major,
                                                  average=p19_tmp11$average))
 
