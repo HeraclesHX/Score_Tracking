@@ -563,7 +563,7 @@ eda_dat_tgt_with_call_all <- eda_dat_tgt_with_call%>%
             call_cnt = sum(call_cnt, na.rm = TRUE),
             avg_call_cnt = call_cnt / doc_cnt)
 
-eda_dat_tgt_with_call_all$hcp.major <- "All"
+eda_dat_tgt_with_call_all$hcp.major <- "Overall"
 eda_dat_tgt_with_call_all <- rbind(eda_dat_tgt_with_call,
                                    eda_dat_tgt_with_call_all)
 
