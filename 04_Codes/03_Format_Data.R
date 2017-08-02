@@ -545,7 +545,7 @@ eda_dat_tgt_with_call <- eda_dat_tgt %>%
   left_join(call_dat_m, by = c("Year", "Quarter", "doctorid")) %>%
   group_by(Year, Quarter, region, hcp.major) %>%
   summarise(doc_cnt = n_distinct(doctorid),
-            call_cnt = sum(call_cnt),
+            call_cnt = sum(call_cnt, na.rm = TRUE),
             avg_call_cnt = call_cnt / doc_cnt)  %>%
   group_by(Year, Quarter, hcp.major) %>%
   do(plyr::rbind.fill(., data.frame(Year = first(.$Year),
@@ -559,8 +559,8 @@ eda_dat_tgt_with_call <- eda_dat_tgt %>%
 
 eda_dat_tgt_with_call_all <- eda_dat_tgt_with_call%>%
   group_by(Year, Quarter, region) %>%
-  summarise(doc_cnt = sum(doc_cnt),
-            call_cnt = sum(call_cnt),
+  summarise(doc_cnt = sum(doc_cnt, na.rm = TRUE),
+            call_cnt = sum(call_cnt, na.rm = TRUE),
             avg_call_cnt = call_cnt / doc_cnt)
 
 eda_dat_tgt_with_call_all$hcp.major <- "All"
