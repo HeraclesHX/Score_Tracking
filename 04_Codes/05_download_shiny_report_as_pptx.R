@@ -34,7 +34,8 @@ app <- shinyApp(
           barplot(table(words_per_tweet[,c("Sepal.Length",input$sel)]), 
                   border=NA,
                   main="Distribution of words per tweet", 
-                  cex.main=1,col="darkcyan")
+                  cex.main=1,
+                  col="darkcyan")
         }
         doc <- addPlot(doc, fun= pptwordcloud,vector.graphic =FALSE ) 
         writeDoc(doc,file)
