@@ -10,57 +10,57 @@ tagList(
   # shinythemes::themeSelector(),
   navbarPage(
     # theme = "cosmo",  # <--- To use a theme, uncomment this
-    theme = shinytheme("yeti"),
-    "西安杨森",
+    theme = shinytheme("superhero"),
+    "Xi'an Janssen",
     id = "panels",
     
-    tabPanel("主页",
+    tabPanel("HOME PAGE",
              fluidPage(
                # fluidRow(h3("Outline")),
                fluidRow(
-                 h3("目录", 
+                 h3("Outline", 
                     style = "font-family: 'Lobster', cursive;
                     font-weight: 500; line-height: 1.1; 
                     color: #ad1d28;")
                  ),
-               fluidRow(h4("1. 受访医生概况")),
+               fluidRow(h4("1. Overview of Survey Physicians")),
                fluidRow(actionLink("link_to_1.1", 
-                                   "1.1 每一跟踪时段的医生数目和新增人数")),
+                                   "1.1 Tracking of Number of Survey Physicians")),
                fluidRow(actionLink("link_to_1.2", 
-                                   "1.2 所选维度的医生分布")),
+                                   "1.2 Distributions of Survey Physicians")),
                fluidRow(actionLink("link_to_1.3", 
-                                   "1.3 各个观念级别的受访医生数目及比例变化情况")),
+                                   "1.3 Tracking of Physicians Score and Ratio")),
                fluidRow(actionLink("link_to_1.4", 
-                                   "1.4 不同观念级别医生的分布情况")),
+                                   "1.4 Distributions of Overall Physicians Scores")),
                fluidRow(actionLink("link_to_1.5", 
-                                   "1.5 不同观念级别医生对斯皮仁诺及其推广活动的接受和认可情况")),
-               fluidRow(h4("2. 医生观念进阶情况")),
+                                   "1.5 Attitude to Sporanox and Promotional Activities")),
+               fluidRow(h4("2. Physician Perception Progression")),
                fluidRow(actionLink("link_to_2.1", 
-                                   "2.1 观念进阶医生的总体及在某一特定维度中的变化情况")),
+                                   "2.1 Perception Progression in Physician")),
                fluidRow(actionLink("link_to_2.2", 
-                                   "2.2 观念进阶医生的分布情况")),
+                                   "2.2 Distribution of Physician with Scores Progression Variation")),
                fluidRow(actionLink("link_to_2.3", 
-                                   "2.3 观念进阶医生对斯皮仁诺及其推广活动的接受和认可情况")),
-               fluidRow(h4("3. 推广活动与受访医生")),
+                                   "2.3 Attitude to Sporanox and Promotional Activities for Physicians with Score Progression")),
+               fluidRow(h4("3. Overview of Promotion Activities")),
                fluidRow(actionLink("link_to_3.1", 
-                                   "3.1 不同观念级别医生参与推广活动情况")),
+                                   "3.1 Overview of Promotion Activities for Physicians at Different Level")),
                fluidRow(actionLink("link_to_3.2", 
-                                   "3.2 不同观念级别医生参与推广活动情况的变化情况")),
-               fluidRow(h4("4. 推广活动对观念进阶医生的影响")),
+                                   "3.2 Tracking of Promotion Activities for Physicians at Different Level")),
+               fluidRow(h4("4. Promotion Activities for Physician with Progression")),
                fluidRow(actionLink("link_to_4.1", 
-                                   "4.1 观念进阶医生参与推广活动情况")),
+                                   "4.1 Relationship of Promotion Activities and Physician Perception Progression")),
                fluidRow(actionLink("link_to_4.2", 
-                                   "4.2 观念进阶医生参与推广活动的变化情况"))
+                                   "4.2 Tracking of Promotion Activities for Physicians with Progression and Overall"))
                
                
              )),
     
-    navbarMenu("1. 受访医生概况",
-               tabPanel("1.1 每一跟踪时段的医生数目和新增人数",
+    navbarMenu("1. Overview of Survey Physicians",
+               tabPanel("1.1 Tracking of Number of Survey Physicians",
                         sidebarPanel(
-                          tags$h3("每季度受访医生数目递增情况及总体分析人数"),
+                          tags$h3("Tracking of Survey Physicians and Newly Added Number by Quarter"),
                           actionLink("link_to_home_page_1.1", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         
                         mainPanel(
@@ -76,18 +76,18 @@ tagList(
                         )
                ),
                
-               tabPanel("1.2 所选维度的医生分布",
+               tabPanel("1.2 Distributions of Survey Physicians",
                         sidebarPanel(
-                          tags$h3("各季度受访医生的总体分布情况"),
-                          selectizeInput("year", "年份",
+                          tags$h3("Distributions of Survey Physicians Will Be Provided Quarterly"),
+                          selectizeInput("year", "Year",
                                          choices = NULL,
                                          multiple = FALSE),
                           selectizeInput("quarter",
-                                         "季度", 
+                                         "Quarter", 
                                          choices = NULL,
                                          multiple = FALSE),
                           actionLink("link_to_home_page_1.2", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         mainPanel(
                           #- several distribution of physicians
@@ -107,15 +107,15 @@ tagList(
                           )
                         )
                ),
-               tabPanel("1.3 各个观念级别的受访医生数目及比例变化情况",
+               tabPanel("1.3 Tracking of Physicians Score and Ratio",
                         sidebarPanel(
-                          tags$h3("每季度各个观念级别的受访医生数目及比例变化情况"),
+                          tags$h3("Tracking of Physicians Score and Ratio Based on Their Highest Scores by Quarter"),
                           selectizeInput("level",
-                                         "医生级别", 
+                                         "Doctor Tier", 
                                          choices = NULL,
                                          multiple = FALSE),
                           actionLink("link_to_home_page_1.3", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         mainPanel(
                           #- Tracking of physicians score and ratio 
@@ -136,18 +136,18 @@ tagList(
                           )
                         )
                ),
-               tabPanel("1.4 不同观念级别医生的分布情况",
+               tabPanel("1.4 Distributions of Overall Physicians Scores",
                         sidebarPanel(
-                          tags$h3("各季度不同观念级别医生的分布情况"),
-                          selectizeInput("year1", "年份",
+                          tags$h3("Distributions of Overall Physicians Scores according to Their Latest Response Will Be Investigated Quarterly"),
+                          selectizeInput("year1", "Year",
                                          choices = NULL,
                                          multiple = FALSE),
                           selectizeInput("quarter1",
-                                         "季度", 
+                                         "Quarter", 
                                          choices = NULL,
                                          multiple = FALSE),
                           actionLink("link_to_home_page_1.4", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         mainPanel(
                           #- Tracking of distribution of physicians score and ratio 
@@ -171,18 +171,18 @@ tagList(
                           )
                         )
                ),
-               tabPanel("1.5 不同观念级别医生对斯皮仁诺及其推广活动的接受和认可情况",
+               tabPanel("1.5 Attitude to Sporanox and Promotional Activities",
                         sidebarPanel(
-                          tags$h3("不同观念级别医生对斯皮仁诺及其推广活动的接受和认可情况（问卷第15、16题）"),
-                          selectizeInput("year2", "年份",
+                          tags$h3("Attitude to Sporanox and Promotional Activities for All Physicians(Q15&Q16)"),
+                          selectizeInput("year2", "Year",
                                          choices = NULL,
                                          multiple = FALSE),
                           selectizeInput("quarter2",
-                                         "季度", 
+                                         "Quarter", 
                                          choices = NULL,
                                          multiple = FALSE),
                           actionLink("link_to_home_page_1.5", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         
                         mainPanel(
@@ -197,23 +197,23 @@ tagList(
                           )
                         ))
     ),
-    navbarMenu("2. 医生观念进阶情况",
-               tabPanel("2.1 观念进阶医生的总体及在某一特定维度中的变化情况",
+    navbarMenu("2. Physician Perception Progression",
+               tabPanel("2.1 Perception Progression in Physician",
                         sidebarPanel(
-                          tags$h3("每季度进阶医生的总体及在某一特定维度中的变化情况"),
-                          selectInput("field", "请选择一个维度：区域/ 医生级别/ 科室",
-                                      list(`区域` = c("region"),
-                                           `医生级别` = c("tier"),
-                                           `科室` = c("department")),
+                          tags$h3("Perception Progression in Overall Physician or A Certain Field"),
+                          selectInput("field", "Select A Field to Investigate",
+                                      list(`Region` = c("region"),
+                                           `Doctor Level` = c("tier"),
+                                           `Department` = c("department")),
                                       selected = "Region"),
                           
-                          selectizeInput("item", "请选择",
+                          selectizeInput("item", "Select A Region/ Doctor Level/ Department",
                                          choices = NULL,
                                          multiple = FALSE),
                           
                           
                           actionLink("link_to_home_page_2.1", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         
                         mainPanel(
@@ -228,17 +228,17 @@ tagList(
                           )
                         )),
                
-               tabPanel("2.2 观念进阶医生的分布情况",
+               tabPanel("2.2 Distribution of Physician with Scores Progression Variation",
                         sidebarPanel(
-                          tags$h3("各季度观念进阶医生的分布情况"),
-                          selectizeInput("year3", "年份",
+                          tags$h3("The Distribution for Physician with Scores Progression Variation"),
+                          selectizeInput("year3", "Year",
                                          choices = NULL,
                                          multiple = FALSE),
-                          selectizeInput("quarter3", "季度",
+                          selectizeInput("quarter3", "Quarter",
                                          choices = NULL,
                                          multiple = FALSE),
                           actionLink("link_to_home_page_2.2", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         
                         mainPanel(
@@ -268,17 +268,17 @@ tagList(
                           )
                         )),
                
-               tabPanel("2.3 观念进阶医生对斯皮仁诺及其推广活动的接受和认可情况",
+               tabPanel("2.3 Attitude to Sporanox and Promotional Activities for Physicians with Score Progression",
                         sidebarPanel(
-                          tags$h3("观念进阶医生对斯皮仁诺及其推广活动的接受和认可情况（问卷第15、16题）"),
-                          selectizeInput("year4", "年份",
+                          tags$h3("Attitude to Sporanox and Promotional Activities for Physicians with Progression(Q15&Q16)"),
+                          selectizeInput("year4", "Year",
                                          choices = NULL,
                                          multiple = FALSE),
-                          selectizeInput("quarter4", "季度",
+                          selectizeInput("quarter4", "Quarter",
                                          choices = NULL,
                                          multiple = FALSE),
                           actionLink("link_to_home_page_2.3", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         
                         mainPanel(
@@ -295,18 +295,18 @@ tagList(
                
     ),
     
-    navbarMenu("3. 推广活动与受访医生",
-               tabPanel("3.1 不同观念级别医生参与推广活动情况",
+    navbarMenu("3. Overview of Promotion Activities",
+               tabPanel("3.1 Overview of Promotion Activities for Physicians at Different Level",
                         sidebarPanel(
-                          tags$h3("不同观念级别医生参与推广活动情况"),
-                          selectizeInput("year5", "年份",
+                          tags$h3("Overview of Promotion Activities for Physicians at Different Level"),
+                          selectizeInput("year5", "Year",
                                          choices = NULL,
                                          multiple = FALSE),
-                          selectizeInput("quarter5", "季度",
+                          selectizeInput("quarter5", "Quarter",
                                          choices = NULL,
                                          multiple = FALSE),
                           actionLink("link_to_home_page_3.1", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         
                         mainPanel(
@@ -321,19 +321,19 @@ tagList(
                           )
                         )
                ),
-               tabPanel("3.2 不同观念级别医生参与推广活动情况的变化情况",
+               tabPanel("3.2 Tracking of Promotion Activities for Physicians at Different Level",
                         sidebarPanel(
-                          tags$h3("每季度不同观念级别医生参与的推广活动情况"),
-                          selectizeInput("meeting_type", "会议类型",
+                          tags$h3("Tracking of Promotion Activities for Physicians with Progression and Overall"),
+                          selectizeInput("meeting_type", "Imeeting Type",
                                          choices = NULL,
                                          multiple = FALSE),
                           
-                          selectizeInput("region1", "区域",
+                          selectizeInput("region1", "Region",
                                          choices = NULL,
                                          multiple = FALSE),
                           
                           actionLink("link_to_home_page_3.2", 
-                                     "返回主页")
+                                     "Back To Home Page")
                           
                         ),
                         
@@ -351,18 +351,18 @@ tagList(
                )
     ),
     
-    navbarMenu("4. 推广活动对观念进阶医生的影响",
-               tabPanel("4.1 观念进阶医生参与推广活动情况",
+    navbarMenu("4. Promotion Activities for Physician with Progression",
+               tabPanel("4.1 Relationship of Promotion Activities and Physician Perception Progression",
                         sidebarPanel(
-                          tags$h3("不同观念级别医生参与推广活动情况"),
-                          selectizeInput("year6", "年份",
+                          tags$h3("Relationship of Promotion Activities and Physician Perception Progression"),
+                          selectizeInput("year6", "Year",
                                          choices = NULL,
                                          multiple = FALSE),
-                          selectizeInput("quarter6", "季度",
+                          selectizeInput("quarter6", "Quarter",
                                          choices = NULL,
                                          multiple = FALSE),
                           actionLink("link_to_home_page_4.1", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         
                         mainPanel(
@@ -377,18 +377,18 @@ tagList(
                           )
                         )
                ),
-               tabPanel("4.2 观念进阶医生参与推广活动的变化情况",
+               tabPanel("4.2 Tracking of Promotion Activities for Physicians with Progression and Overall",
                         sidebarPanel(
-                          tags$h3("每季度不同观念级别医生参与的推广活动情况"),
-                          selectizeInput("meeting_type1", "会议类型",
+                          tags$h3("Tracking of Promotion Activities for Physicians with Progression and Overall"),
+                          selectizeInput("meeting_type1", "Imeeting Type",
                                          choices = NULL,
                                          multiple = FALSE),
                           
-                          selectizeInput("region2", "区域",
+                          selectizeInput("region2", "Region",
                                          choices = NULL,
                                          multiple = FALSE),
                           actionLink("link_to_home_page_4.2", 
-                                     "返回主页")
+                                     "Back To Home Page")
                         ),
                         
                         mainPanel(

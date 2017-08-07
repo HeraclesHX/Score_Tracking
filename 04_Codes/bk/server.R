@@ -1,4 +1,3 @@
-
 library(shiny)
 library(shinythemes)
 library(plotly)
@@ -7,7 +6,6 @@ library(shinydashboard)
 library(tidyr)
 
 load("./Data/.RData")
-
 function(input, output, session) {
   
   observe({
@@ -129,123 +127,123 @@ function(input, output, session) {
   
   ##- do with action link
   observeEvent(input$link_to_1.1, {
-    newvalue <- "1.1 每一跟踪时段的医生数目和新增人数"
+    newvalue <- "1.1 Tracking of Number of Survey Physicians"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_1.2, {
-    newvalue <- "1.2 所选维度的医生分布"
+    newvalue <- "1.2 Distributions of Survey Physicians"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_1.3, {
-    newvalue <- "1.3 各个观念级别的受访医生数目及比例变化情况"
+    newvalue <- "1.3 Tracking of Physicians Score and Ratio"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_1.4, {
-    newvalue <- "1.4 不同观念级别医生的分布情况"
+    newvalue <- "1.4 Distributions of Overall Physicians Scores"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_1.5, {
-    newvalue <- "1.5 不同观念级别医生对斯皮仁诺及其推广活动的接受和认可情况"
+    newvalue <- "1.5 Attitude to Sporanox and Promotional Activities"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_2.1, {
-    newvalue <- "2.1 观念进阶医生的总体及在某一特定维度中的变化情况"
+    newvalue <- "2.1 Perception Progression in Physician"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_2.2, {
-    newvalue <- "2.2 观念进阶医生的分布情况"
+    newvalue <- "2.2 Distribution of Physician with Scores Progression Variation"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_2.3, {
-    newvalue <- "2.3 观念进阶医生对斯皮仁诺及其推广活动的接受和认可情况"
+    newvalue <- "2.3 Attitude to Sporanox and Promotional Activities for Physicians with Score Progression"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_3.1, {
-    newvalue <- "3.1 不同观念级别医生参与推广活动情况"
+    newvalue <- "3.1 Overview of Promotion Activities for Physicians at Different Level"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_3.2, {
-    newvalue <- "3.2 不同观念级别医生参与推广活动情况的变化情况"
+    newvalue <- "3.2 Tracking of Promotion Activities for Physicians at Different Level"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_4.1, {
-    newvalue <- "4.1 观念进阶医生参与推广活动情况"
+    newvalue <- "4.1 Relationship of Promotion Activities and Physician Perception Progression"
     updateTabItems(session, "panels", newvalue)
   })
   observeEvent(input$link_to_4.2, {
-    newvalue <- "4.2 观念进阶医生参与推广活动的变化情况"
+    newvalue <- "4.2 Tracking of Promotion Activities for Physicians with Progression and Overall"
     updateTabItems(session, "panels", newvalue)
   })
   
   #- back to home page actionlink
   observeEvent(input$link_to_home_page_1.1, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_1.2, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_1.3, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_1.4, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_1.5, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_2.1, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   
   observeEvent(input$link_to_home_page_2.2, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_2.3, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_3.1, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_3.2, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_4.1, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
   observeEvent(input$link_to_home_page_4.2, {
-    newvalue <- "主页"
+    newvalue <- "HOME PAGE"
     updateTabItems(session, "panels", newvalue)
   })
   
@@ -260,9 +258,9 @@ function(input, output, session) {
                  marker = list(color = 'rgb(158,202,225)',
                                line = list(color = 'rgb(8,48,107)', 
                                            width = 1.5))) %>%
-      layout(title = "每季度受访医生总数",
-             xaxis = list(title = "季度"),
-             yaxis = list(title = "医生数量"),
+      layout(title = "Total Physicians' Count by Quarter",
+             xaxis = list(title = "Quarter"),
+             yaxis = list(title = "Physician Count"),
              annotations = list(x = doc_cnt_qtr$Quarter,
                                 y = doc_cnt_qtr$doc_cnt,
                                 text = doc_cnt_qtr$doc_cnt,
@@ -291,9 +289,9 @@ function(input, output, session) {
                  marker = list(color = 'rgb(158,202,225)',
                                line = list(color = 'rgb(8,48,107)', 
                                            width = 1.5))) %>%
-      layout(title = "每季度受访医生新增人数",
-             xaxis = list(title = "季度"),
-             yaxis = list(title = "新增医生数量"),
+      layout(title = "Counts Change of Physicians by Quarter",
+             xaxis = list(title = "Quarter"),
+             yaxis = list(title = "Change of Physician Count"),
              annotations = list(x = doc_cnt_qtr$Quarter,
                                 y = doc_cnt_qtr$count_change,
                                 text = doc_cnt_qtr$count_change,
@@ -334,25 +332,18 @@ function(input, output, session) {
   output$region_pie <- renderPlotly({
     plot_ly(tmp_doc_region_dist_qtr(), labels = ~region, values = ~doc_cnt) %>%
       add_pie(hole = 0.6) %>%
-      layout(title = paste("受访医生大区分布 ",
+      layout(title = paste("Region Distribution of Physicians in ",
                            input$year, input$quarter, sep = ""),
              showlegend = F,
              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-             autosize = T,
-             margin =  list(
-               l = 150,
-               r = 150,
-               b = 100,
-               t = 100,
-               pad = 4
-             ))
+             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    
   })
   
   output$level_pie <- renderPlotly({
     plot_ly(tmp_doc_level_dist_qtr(), labels = ~doctor.tier, values = ~doc_cnt) %>%
       add_pie(hole = 0.6) %>%
-      layout(title = paste("受访医生潜力等级分布 ", 
+      layout(title = paste("Level Distribution of Physicians in ", 
                            input$year, input$quarter, sep = ""),
              showlegend = F,
              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
@@ -371,7 +362,7 @@ function(input, output, session) {
   output$department_pie <- renderPlotly({
     plot_ly(tmp_doc_department_dist_qtr(), labels = ~department, values = ~doc_cnt) %>%
       add_pie(hole = 0.6) %>%
-      layout(title = paste("受访医生科室分布 ", 
+      layout(title = paste("Department Distribution of Physicians in ", 
                            input$year, input$quarter, sep = ""),
              showlegend = F,
              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
@@ -402,9 +393,10 @@ function(input, output, session) {
             mode = 'linesmarker',
             linetype = ~hcp.major,
             color = ~hcp.major) %>%
-      layout(title = paste(input$level, " 级医生每季度观念变化情况"),
-             xaxis = list(title = '季度'),
-             yaxis = list(title = '医生数量'),
+      layout(title = paste("Tracking of ", input$level, 
+                           " Tier Physicians Scores by Quarter"),
+             xaxis = list(title = 'Quarter'),
+             yaxis = list(title = 'Physicians Count'),
              autosize = T,
              margin =  list(
                l = 150,
@@ -421,9 +413,10 @@ function(input, output, session) {
             y = ~doc_cnt_pct,
             type = "bar",
             color = ~hcp.major) %>%
-      layout(title = paste(input$level, " 级医生每季度观念得分分布情况"),
-             xaxis = list(title = '季度'),
-             yaxis = list(title = '比例'),
+      layout(title = paste("Distribution of ", input$level, 
+                           " Tier Physicians Scores by Quarter"),
+             xaxis = list(title = 'Quarter'),
+             yaxis = list(title = 'Percentage'),
              barmode = "stack",
              autosize = T,
              margin =  list(
@@ -460,10 +453,10 @@ function(input, output, session) {
             y = ~doc_cnt_pct,
             type = "bar",
             color = ~hcp.major) %>%
-      layout(title = paste("按区域医生观念得分分布情况 ",
+      layout(title = paste("Distribution of Physicians Scores by Region in ",
                            input$year1, input$quarter1, sep = ""),
-             xaxis = list(title = '区域'),
-             yaxis = list(title = '比例'),
+             xaxis = list(title = 'Region'),
+             yaxis = list(title = 'Percentage'),
              barmode = "stack",
              autosize = T,
              margin =  list(
@@ -481,10 +474,10 @@ function(input, output, session) {
             y = ~doc_cnt_pct,
             type = "bar",
             color = ~hcp.major) %>%
-      layout(title = paste("按医生级别医生观念得分分布情况 ",
+      layout(title = paste("Distribution of Physicians Scores by Doctor Level in ",
                            input$year1, input$quarter1, sep = ""),
-             xaxis = list(title = '医生级别'),
-             yaxis = list(title = '比例'),
+             xaxis = list(title = 'Doctor Level'),
+             yaxis = list(title = 'Percentage'),
              barmode = "stack",
              autosize = T,
              margin =  list(
@@ -502,10 +495,10 @@ function(input, output, session) {
             y = ~doc_cnt_pct,
             type = "bar",
             color = ~hcp.major) %>%
-      layout(title = paste("按科室医生观念得分分布情况 ",
+      layout(title = paste("Distribution of Physicians Scores by Department in ",
                            input$year1, input$quarter1, sep = ""),
-             xaxis = list(title = '科室'),
-             yaxis = list(title = '比例'),
+             xaxis = list(title = 'Department'),
+             yaxis = list(title = 'Percentage'),
              barmode = "stack",
              autosize = T,
              margin =  list(
@@ -542,10 +535,10 @@ function(input, output, session) {
             mode = 'linesmarker',
             linetype = ~answers,
             color = ~answers) %>%
-      layout(title = paste("对斯皮仁诺优势的认可情况 ",
+      layout(title = paste("Sporanox Advantages Accepted by Physician with Different Scores in ",
                            input$year2, input$quarter2, sep = ""),
-             xaxis = list(title = '观念得分'),
-             yaxis = list(title = '比例'),
+             xaxis = list(title = 'HCP Major'),
+             yaxis = list(title = 'Percentage'),
              autosize = T,
              margin =  list(
                l = 150,
@@ -564,10 +557,10 @@ function(input, output, session) {
             mode = 'linesmarker',
             linetype = ~answers,
             color = ~answers) %>%
-      layout(title = paste("对斯皮仁诺推广活动接受情况 ",
+      layout(title = paste("Sporanox Promotions Accepted by Physician with Different Scores in ",
                            input$year2, input$quarter2, sep = ""),
-             xaxis = list(title = '观念得分'),
-             yaxis = list(title = '比例'),
+             xaxis = list(title = 'HCP Major'),
+             yaxis = list(title = 'Percentage'),
              autosize = T,
              margin =  list(
                l = 150,
@@ -586,20 +579,20 @@ function(input, output, session) {
             x = ~Quarter,
             y = ~adv, 
             type = "bar", 
-            name = "观念进阶的医生数量") %>%
+            name = "Counts of Physicians with Perception Progression") %>%
       add_trace(x = ~Quarter, 
                 y = ~adv_ratio, 
                 type = "scatter",
                 mode = "lines",
                 yaxis = "y2",
-                name = "观念进阶的医生数量比例") %>%
-      layout(yaxis2 = list(title = "比例",
+                name = "Percentage of Physicians with Perception Progression") %>%
+      layout(yaxis2 = list(title = "Percentage",
                            overlaying = "y",
                            side = "right",
                            fill = "tozeroy"),
-             yaxis = list(title = "观念进阶的医生数量"),
-             xaxis = list(name = "季度"),
-             title = "每季度的总体观念进阶医生的数量/比例",
+             yaxis = list(title = "Counts of Physicans with Perception Progression"),
+             xaxis = list(name = "Quarter"),
+             title = "Tracking of Physicans' Counts/Percentage with Perception Progression in Overall Physician",
              legend = list(x = 0,
                            y = 100,
                            orientation = "h"),
@@ -637,20 +630,20 @@ function(input, output, session) {
             x = ~Quarter,
             y = ~adv, 
             type = "bar", 
-            name = "观念进阶的医生数量") %>%
+            name = "Counts of Physicians with Perception Progression") %>%
       add_trace(x = ~Quarter, 
                 y = ~adv_ratio, 
                 type = "scatter",
                 mode = "lines",
                 yaxis = "y2",
-                name = "观念进阶的医生数量比例") %>%
-      layout(yaxis2 = list(title = "比例",
+                name = "Percentage of Physicians with Perception Progression") %>%
+      layout(yaxis2 = list(title = "Percentage",
                            overlaying = "y",
                            side = "right",
                            rangemode = "tozero"),
-             yaxis = list(title = "观念进阶的医生数量"),
-             xaxis = list(name = "季度"),
-             title = paste("每季度的总体观念进阶医生的数量/比例于", input$item, sep = " "),
+             yaxis = list(title = "Counts of Physicans with Perception Progression"),
+             xaxis = list(name = "Quarter"),
+             title = paste("Physicans' Counts/Percentage with Perception Progression in", input$field, input$item, sep = " "),
              legend = list(x = 0,
                            y = 100,
                            orientation = "h"),
@@ -676,10 +669,10 @@ function(input, output, session) {
       mutate(Year = substr(Quarter, 1, 4),
              Quarter = substr(Quarter, 6, 7),
              adv_ratio = adv / total,
-             `观念进阶医生` = adv_ratio) %>%
+             `Physican with Progression` = adv_ratio) %>%
       filter(Year == input$year3,
              Quarter == input$quarter3) %>%
-      mutate(`观念未进阶医生` = 1 - `观念进阶医生`) %>%
+      mutate(`No Change` = 1 - `Physican with Progression`) %>%
       mutate(Quarter = paste(Year, Quarter, sep = "")) %>%
       select(-total, -adv, -Year, -adv_ratio) %>%
       gather(item, ratio, -region, -Quarter)
@@ -696,10 +689,10 @@ function(input, output, session) {
       mutate(Year = substr(Quarter, 1, 4),
              Quarter = substr(Quarter, 6, 7),
              adv_ratio = adv / total,
-             `观念进阶医生` = adv_ratio) %>%
+             `Physican with Progression` = adv_ratio) %>%
       filter(Year == input$year3,
              Quarter == input$quarter3) %>%
-      mutate(`观念未进阶医生` = 1 - `观念进阶医生`) %>%
+      mutate(`No Change` = 1 - `Physican with Progression`) %>%
       mutate(Quarter = paste(Year, Quarter, sep = "")) %>%
       select(-total, -adv, -Year, -adv_ratio) %>%
       gather(item, ratio, -department, -Quarter)
@@ -716,10 +709,10 @@ function(input, output, session) {
       mutate(Year = substr(Quarter, 1, 4),
              Quarter = substr(Quarter, 6, 7),
              adv_ratio = adv / total,
-             `观念进阶医生` = adv_ratio) %>%
+             `Physican with Progression` = adv_ratio) %>%
       filter(Year == input$year3,
              Quarter == input$quarter3) %>%
-      mutate(`观念未进阶医生` = 1 - `观念进阶医生`) %>%
+      mutate(`No Change` = 1 - `Physican with Progression`) %>%
       mutate(Quarter = paste(Year, Quarter, sep = "")) %>%
       select(-total, -adv, -Year, -adv_ratio) %>%
       gather(item, ratio, -doctor.tier, -Quarter)
@@ -737,10 +730,10 @@ function(input, output, session) {
             y = ~ratio,
             type = "bar",
             color = ~item) %>%
-      layout(title = paste("按区域观念进阶医生的分布 ",
+      layout(title = paste("Distribution of Physicians Scores by Region in ",
                            input$year3, input$quarter3, sep = ""),
-             xaxis = list(title = '区域'),
-             yaxis = list(title = '比例'),
+             xaxis = list(title = 'Region'),
+             yaxis = list(title = 'Percentage'),
              barmode = "stack",
              autosize = T,
              margin =  list(
@@ -758,10 +751,10 @@ function(input, output, session) {
             y = ~ratio,
             type = "bar",
             color = ~item) %>%
-      layout(title = paste("按科室观念进阶医生的分布 ",
+      layout(title = paste("Distribution of Physicians Scores by Department in ",
                            input$year3, input$quarter3, sep = ""),
-             xaxis = list(title = '科室'),
-             yaxis = list(title = '比例'),
+             xaxis = list(title = 'Department'),
+             yaxis = list(title = 'Percentage'),
              barmode = "stack",
              autosize = T,
              margin =  list(
@@ -779,10 +772,10 @@ function(input, output, session) {
             y = ~ratio,
             type = "bar",
             color = ~item) %>%
-      layout(title = paste("按医生级别观念进阶医生的分布 ",
+      layout(title = paste("Distribution of Physicians Scores by Doctor Level in ",
                            input$year3, input$quarter3, sep = ""),
-             xaxis = list(title = '医生级别'),
-             yaxis = list(title = '比例'),
+             xaxis = list(title = 'Doctor Level'),
+             yaxis = list(title = 'Percentage'),
              barmode = "stack",
              autosize = T,
              margin =  list(
@@ -808,8 +801,8 @@ function(input, output, session) {
                                         doc_cnt = sum(.$doc_cnt)
       ))) %>%
       filter(!is.na(adv_flag)) %>%
-      mutate(flag = ifelse(adv_flag == 1, "观念进阶医生",
-                           "所有医生"),
+      mutate(flag = ifelse(adv_flag == 1, "Physicians with Progress",
+                           "Overall Physicians"),
              doc_cnt_pct = ifelse(adv_flag == 1, doc_cnt / doc_cnt_total_adv,
                                   doc_cnt / doc_cnt_total))
   })
@@ -827,8 +820,8 @@ function(input, output, session) {
                                         doc_cnt = sum(.$doc_cnt)
       ))) %>%
       filter(!is.na(adv_flag)) %>%
-      mutate(flag = ifelse(adv_flag == 1, "观念进阶医生",
-                           "所有医生"),
+      mutate(flag = ifelse(adv_flag == 1, "Physicians with Progress",
+                           "Overall Physicians"),
              doc_cnt_pct = ifelse(adv_flag == 1, doc_cnt / doc_cnt_total_adv,
                                   doc_cnt / doc_cnt_total))
   })
@@ -840,10 +833,10 @@ function(input, output, session) {
             type = "bar",
             color = ~flag,
             orientation = "h") %>%
-      layout(title = paste("观念进阶医生对斯皮仁诺优势的认可情况 ",
+      layout(title = paste("Sporanox Advantages Accepted by Physicians with Progression ",
                            input$year4, input$quarter4, sep = ""),
-             xaxis = list(title = '比例'),
-             yaxis = list(title = '认可情况'),
+             xaxis = list(title = 'Percentage'),
+             yaxis = list(title = 'Attitude'),
              barmode = "group",
              autosize = T,
              margin =  list(
@@ -862,10 +855,10 @@ function(input, output, session) {
             type = "bar",
             color = ~flag,
             orientation = "h") %>%
-      layout(title = paste("观念进阶医生对斯皮仁诺推广活动的接受情况 ",
+      layout(title = paste("Sporanox Promotional Activities Accepted by Physicians with Progression ",
                            input$year4, input$quarter4, sep = ""),
-             xaxis = list(title = '比例'),
-             yaxis = list(title = '推广活动'),
+             xaxis = list(title = 'Percentage'),
+             yaxis = list(title = 'Promotional Activities'),
              barmode = "group",
              autosize = T,
              margin =  list(
@@ -897,10 +890,10 @@ function(input, output, session) {
             y = ~avg_meeting_cnt,
             type = "bar",
             color = ~hcp.major) %>%
-      layout(title = paste("不同观念级别医生出席会议的平均次数 ",
+      layout(title = paste("Average Meeting Counts for Physicians with Different Scores in ",
                            input$year5, input$quarter5, sep = ""),
-             xaxis = list(title = '会议类型'),
-             yaxis = list(title = '出席会议平均次数'),
+             xaxis = list(title = 'Meeting Type'),
+             yaxis = list(title = 'Average Meeting Counts'),
              barmode = "group",
              autosize = T,
              margin =  list(
@@ -918,10 +911,10 @@ function(input, output, session) {
             y = ~avg_call_cnt,
             type = "bar",
             color = ~hcp.major) %>%
-      layout(title = paste("不同观念级别医生接受拜访的平均次数 ",
+      layout(title = paste("Average Call Counts for Physicians with Different Scores in ",
                            input$year5, input$quarter5, sep = ""),
-             xaxis = list(title = '区域'),
-             yaxis = list(title = '接受拜访的平均次数'),
+             xaxis = list(title = 'Region'),
+             yaxis = list(title = 'Average Call Counts'),
              barmode = "group",
              autosize = T,
              margin =  list(
@@ -950,9 +943,9 @@ function(input, output, session) {
             mode = 'linesmarker',
             linetype = ~hcp.major,
             color = ~hcp.major) %>%
-      layout(title = paste("每季度不同观念级别医生出席会议的平均次数"),
-             xaxis = list(title = '季度'),
-             yaxis = list(title = '出席会议平均次数'),
+      layout(title = paste("Tracking of Average Meeting Count for Physicians with Different Scores"),
+             xaxis = list(title = 'Quarter'),
+             yaxis = list(title = 'Average Meeting Counts'),
              autosize = T,
              margin =  list(
                l = 150,
@@ -979,9 +972,9 @@ function(input, output, session) {
             mode = 'linesmarker',
             linetype = ~hcp.major,
             color = ~hcp.major) %>%
-      layout(title = paste("每季度不同观念级别医生接受拜访的平均次数"),
-             xaxis = list(title = '季度'),
-             yaxis = list(title = '接受拜访的平均次数'),
+      layout(title = paste("Tracking of Average Call Count for Physicians with Different Scores"),
+             xaxis = list(title = 'Quarter'),
+             yaxis = list(title = 'Average Call Counts'),
              autosize = T,
              margin =  list(
                l = 150,
@@ -1012,10 +1005,10 @@ function(input, output, session) {
             y = ~avg_meeting_cnt,
             type = "bar",
             color = ~adv_flag) %>%
-      layout(title = paste("观念进阶医生出席会议的平均次数 ",
+      layout(title = paste("Average Meeting Counts for Physicians with Perception Progression VS. Overall in ",
                            input$year6, input$quarter6, sep = ""),
-             xaxis = list(title = '会议类型'),
-             yaxis = list(title = '出席会议的平均次数'),
+             xaxis = list(title = 'Meeting Type'),
+             yaxis = list(title = 'Average Meeting Counts'),
              barmode = "group",
              autosize = T,
              margin =  list(
@@ -1033,10 +1026,10 @@ function(input, output, session) {
             y = ~avg_call_cnt,
             type = "bar",
             color = ~adv_flag) %>%
-      layout(title = paste("观念进阶医生接受拜访的平均次数 ",
+      layout(title = paste("Average Call Number for Physicians with Perception Progression VS. Overall in ",
                            input$year6, input$quarter6, sep = ""),
-             xaxis = list(title = '大区'),
-             yaxis = list(title = '接受拜访的平均次数'),
+             xaxis = list(title = 'Region'),
+             yaxis = list(title = 'Average Call Counts'),
              barmode = "group",
              autosize = T,
              margin =  list(
@@ -1047,16 +1040,6 @@ function(input, output, session) {
                pad = 4
              ))
   })
-  
-  eda_dat_tgt_with_meeting_adv_all$adv_flag <-
-    ifelse(eda_dat_tgt_with_meeting_adv_all$adv_flag == "Overall Physicians",
-           "所有受访医生",
-           "观念进阶医生")
-  
-  eda_dat_tgt_with_call_adv_all$adv_flag <-
-    ifelse(eda_dat_tgt_with_call_adv_all$adv_flag == "Overall Physicians",
-           "所有受访医生",
-           "观念进阶医生")
   
   ##-- 4.2
   tmp1_eda_dat_tgt_with_meeting_adv_all <- reactive({
@@ -1075,9 +1058,9 @@ function(input, output, session) {
             mode = 'linesmarker',
             linetype = ~adv_flag,
             color = ~adv_flag) %>%
-      layout(title = paste("每季度观念进阶医生出席会议的平均次数"),
-             xaxis = list(title = '季度'),
-             yaxis = list(title = '出席会议的平均次数'),
+      layout(title = paste("Tracking of Average Meeting Count for Physicians with Perception Progression VS. Overall"),
+             xaxis = list(title = 'Quarter'),
+             yaxis = list(title = 'Average Meeting Counts'),
              autosize = T,
              margin =  list(
                l = 150,
@@ -1104,9 +1087,9 @@ function(input, output, session) {
             mode = 'linesmarker',
             linetype = ~adv_flag,
             color = ~adv_flag) %>%
-      layout(title = paste("每季度观念进阶医生接受拜访的平均次数"),
-             xaxis = list(title = '季度'),
-             yaxis = list(title = '接受拜访的平均次数'),
+      layout(title = paste("Tracking of Average Call Count for Physicians with Perception Progression VS. Overall"),
+             xaxis = list(title = 'Quarter'),
+             yaxis = list(title = 'Average Call Counts'),
              autosize = T,
              margin =  list(
                l = 150,
