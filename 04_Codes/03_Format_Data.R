@@ -620,16 +620,3 @@ eda_dat_tgt_with_call_adv_all <- eda_dat_tgt_with_call_adv_all %>%
                                     call_cnt = sum(.$call_cnt, na.rm = TRUE),
                                     avg_call_cnt = sum(.$call_cnt, na.rm = TRUE) / 
                                       sum(.$doc_cnt, na.rm = TRUE))))
-
-
-
-
-
-
-
-
-
-
-  
- 
-
